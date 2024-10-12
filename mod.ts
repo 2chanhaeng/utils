@@ -1,3 +1,3 @@
-export * from "apply";
+export { default as apply } from "apply";
 export * from "iter";
-export * from "pipe";
+export { default as pipe } from "pipe";
