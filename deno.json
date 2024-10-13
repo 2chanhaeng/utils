@@ -9,9 +9,10 @@
   "imports": {
     "array": "./array/mod.ts",
     "apply": "./apply/mod.ts",
-    "pipe": "./pipe/mod.ts",
     "iter": "./iter/mod.ts",
-    "@/": "./",
+    "pipe": "./pipe/mod.ts",
+    "pred": "./pred/mod.ts",
+    "types": "./types/mod.ts",
     "@std/assert": "jsr:@std/assert@1"
   }
 }
