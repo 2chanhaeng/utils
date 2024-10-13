@@ -1,16 +1,19 @@
-type FilterFn<T> = (x: T, i: number) => boolean;
+import type { Predicate } from "types";
+import isFilterable from "../pred/isFilterable.ts";
+import enumerate from "./enumerate.ts";
 
 export default function filter<T>(
-  f: FilterFn<T>
-): (iter: T[] | IteratorObject<T>) => Generator<T>;
+  f: Predicate<T>
+): (iter: Iterable<T>) => Generator<T>;
 export default function filter<T>(
-  f: FilterFn<T>,
-  iter: T[] | IteratorObject<T>
+  f: Predicate<T>,
+  iter: Iterable<T>
 ): Generator<T>;
 export default function* filter<T>(
-  f: FilterFn<T>,
-  iter?: T[] | IteratorObject<T>
+  f: Predicate<T>,
+  iter?: Iterable<T>
 ): Generator<T> | ((iter: IteratorObject<T>) => Generator<T>) {
   if (iter === undefined) return (iter: IteratorObject<T>) => filter(f, iter);
-  yield* iter.filter(f);
+  if (isFilterable<T>(iter)) yield* iter.filter(f);
+  else for (const [x, i] of enumerate(iter)) if (f(x, i)) yield x;
 }

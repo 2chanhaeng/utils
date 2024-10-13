@@ -1,5 +1,8 @@
+import count from "./count.ts";
+import zip from "./zip.ts";
+
 export default function* enumerate<T>(
-  iter: T[] | IteratorObject<T>
+  iter: Iterable<T>
 ): Generator<[T, number]> {
-  yield* iter.map((x, i) => [x, i]);
+  for (const [x, i] of zip(iter, count())) yield [x, i];
 }

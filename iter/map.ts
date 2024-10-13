@@ -1,17 +1,22 @@
-type MapFn<T, S> = (x: T, i: number) => S;
+import type { Mappable, Mapper } from "types";
+import enumerate from "./enumerate.ts";
+import { isIterable, isMappable } from "pred";
 
 export default function map<T, S>(
-  f: MapFn<T, S>
-): (iter: T[] | IteratorObject<T>) => Generator<S>;
+  f: Mapper<T, S>
+): (iter: Mappable<T> | Iterable<T>) => Generator<S>;
 export default function map<T, S>(
-  f: MapFn<T, S>,
-  iter: T[] | IteratorObject<T>
+  f: Mapper<T, S>,
+  iter: Mappable<T> | Iterable<T>
 ): Generator<S>;
 export default function* map<T, S>(
-  f: MapFn<T, S>,
-  iter?: T[] | IteratorObject<T>
-): Generator<S> | ((iter: T[] | IteratorObject<T>) => Generator<S>) {
-  if (iter === undefined)
-    return (iter: T[] | IteratorObject<T>) => map(f, iter);
-  yield* iter.map(f);
+  f: Mapper<T, S>,
+  iter?: Mappable<T> | Iterable<T>
+): Generator<S> | ((iter: Mappable<T>) => Generator<S>) {
+  if (iter === undefined) return (iter: Mappable<T>) => map(f, iter);
+  if (isMappable(iter)) {
+    const mapped = iter.map(f);
+    if (isIterable(mapped)) yield* mapped;
+    else return mapped;
+  } else for (const [x, i] of enumerate(iter)) yield f(x, i);
 }

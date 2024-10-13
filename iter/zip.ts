@@ -1,13 +1,16 @@
-export default function* zip<T, S>(
-  // TODO: approve type safety
-  ...iters: (T[] | IteratorObject<T>)[]
-): Generator<[T, ...S[]]> {
-  const iterators = iters.map((iter) =>
-    Array.isArray(iter) ? Iterator.from(iter) : iter
-  );
-  while (true) {
-    const nexts = iterators.map((iter) => iter.next());
-    if (nexts.some(({ done }) => done)) break;
-    yield nexts.map(({ value }) => value) as [T, ...S[]];
-  }
+import type { ItersItems } from "types";
+
+export default function zip<T extends Iterable<unknown>[]>(
+  ...iters: T
+): Generator<ItersItems<T>> {
+  return zipper(iters.map(Iterator.from));
+}
+
+function* zipper<T extends IteratorObject<unknown>[]>(
+  iterators: T
+): Generator<ItersItems<T>> {
+  const results = iterators.map((iterator) => iterator.next());
+  if (results.some((result) => result.done)) return;
+  yield results.map((result) => result.value) as ItersItems<T>;
+  yield* zipper(iterators);
 }
