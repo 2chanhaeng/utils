@@ -7,6 +7,7 @@
     "dev": "deno run --watch main.ts"
   },
   "imports": {
+    "array": "./array/mod.ts",
     "apply": "./apply/mod.ts",
     "pipe": "./pipe/mod.ts",
     "iter": "./iter/mod.ts",
