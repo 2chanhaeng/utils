@@ -9,11 +9,18 @@ export default function map<T, S>(
   f: Mapper<T, S>,
   iter: Mappable<T> | Iterable<T>
 ): Generator<S>;
-export default function* map<T, S>(
+export default function map<T, S>(
   f: Mapper<T, S>,
   iter?: Mappable<T> | Iterable<T>
 ): Generator<S> | ((iter: Mappable<T>) => Generator<S>) {
   if (iter === undefined) return (iter: Mappable<T>) => map(f, iter);
+  return mapGen(f, iter);
+}
+
+function* mapGen<T, S>(
+  f: Mapper<T, S>,
+  iter: Mappable<T> | Iterable<T>
+): Generator<S> {
   if (isMappable(iter)) {
     const mapped = iter.map(f);
     if (isIterable(mapped)) yield* mapped;

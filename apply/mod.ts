@@ -1,28 +1,47 @@
-const isPromise = <T>(x: Promise<T> | T) => x instanceof Promise;
-const applyNotCurried = <T, S>(
-  x: T,
-  f: (x: T extends Promise<infer R> ? R : T) => S
-) =>
-  (isPromise(x)
-    ? (x as Promise<T>).then(f as (x: T) => S)
-    : f(x as T extends Promise<infer P> ? P : T)) as T extends Promise<unknown>
-    ? S extends Promise<infer U>
-      ? Promise<U>
-      : Promise<S>
-    : S;
+import { isPromise } from "pred";
 
-function apply<T>(x: Promise<T>): <S>(f: (x: T) => Promise<S>) => Promise<S>;
-function apply<T>(x: Promise<T>): <S>(f: (x: T) => S) => Promise<S>;
-function apply<T, S>(x: Promise<T>, f: (x: T) => Promise<S>): Promise<S>;
-function apply<T, S>(x: Promise<T>, f: (x: T) => S): Promise<S>;
-function apply<T>(x: T): <S>(f: (x: T) => Promise<S>) => Promise<S>;
-function apply<T, S>(x: T, f: (x: T) => Promise<S>): Promise<S>;
-function apply<T>(x: T): <S>(f: (x: T) => S) => S;
-function apply<T, S>(x: T, f: (x: T) => S): S;
-function apply<T, S>(x: T, f?: (x: T extends Promise<infer R> ? R : T) => S) {
-  return f === undefined
-    ? (f: (x: T extends Promise<infer R> ? R : T) => S) =>
-        applyNotCurried<T, ReturnType<typeof f>>(x, f)
-    : applyNotCurried(x, f);
+function apply<T, U>(
+  x: Promise<T>,
+  f: (arg: Awaited<T>) => Promise<U>
+): Promise<Awaited<U>>;
+function apply<T, U>(
+  x: Promise<T>,
+  f: (arg: Awaited<T>) => U
+): Promise<Awaited<U>>;
+function apply<T, U>(
+  x: T,
+  f: (arg: Awaited<T>) => Promise<U>
+): Promise<Awaited<U>>;
+function apply<T, U>(x: T, f: (arg: Awaited<T>) => U): U;
+function apply<T, U>(
+  x: Promise<T>
+): {
+  (f: (arg: Awaited<T>) => Promise<U>): Promise<Awaited<U>>;
+  (f: (arg: Awaited<T>) => U): Promise<Awaited<U>>;
+};
+function apply<T, U>(
+  x: T
+): {
+  (f: (arg: Awaited<T>) => Promise<U>): Promise<Awaited<U>>;
+  (f: (arg: Awaited<T>) => U): U;
+};
+function apply<T, U>(
+  x: T | Promise<T>,
+  f?: (arg: Awaited<T>) => U | Promise<U>
+):
+  | U
+  | Promise<Awaited<U>>
+  | ((f: (arg: Awaited<T>) => U | Promise<U>) => U | Promise<Awaited<U>>) {
+  if (f === undefined)
+    return (fn: (arg: Awaited<T>) => U | Promise<U>) =>
+      isPromise(x)
+        ? apply(x, fn)
+        : (fn(x as Awaited<T>) as U | Promise<Awaited<U>>);
+  if (isPromise(x))
+    return (x as Promise<T>).then((value) => f(value as Awaited<T>)) as Promise<
+      Awaited<U>
+    >;
+  return f(x as Awaited<T>) as U;
 }
+
 export default apply;
