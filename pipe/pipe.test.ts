@@ -14,4 +14,9 @@ Deno.test("pipe", async () => {
     async (x: number) => x + 1
   )(1);
   assertEquals(asyncResult, 3);
+  const multipleArgs = pipe(
+    (x: number, y: number) => x + y,
+    (x: number) => x + 1
+  )(1, 2);
+  assertEquals(multipleArgs, 4);
 });
