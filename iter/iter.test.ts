@@ -8,6 +8,7 @@ import {
   map,
   range,
   reduce,
+  take,
   takeWhile,
   zip,
 } from "./mod.ts";
@@ -107,6 +108,7 @@ Deno.test("reduce", () => {
   );
   itemPromiseResult2.then((res) => assertEquals(res, 15));
 });
+
 
 Deno.test("takeWhile", () => {
   const items = [1, 2, 3, 4, 5, 4, 3, 2, 1];
