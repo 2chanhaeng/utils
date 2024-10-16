@@ -9,6 +9,7 @@
   "imports": {
     "apply": "./apply/mod.ts",
     "array": "./array/mod.ts",
+    "io": "./io/mod.ts",
     "iter": "./iter/mod.ts",
     "pipe": "./pipe/mod.ts",
     "pred": "./pred/mod.ts",
