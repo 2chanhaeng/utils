@@ -1,5 +1,6 @@
 import { assertEquals } from "@std/assert";
 import {
+  accumulate,
   count,
   enumerate,
   filter,
@@ -9,6 +10,34 @@ import {
   reduce,
   zip,
 } from "./mod.ts";
+
+Deno.test("accumulate", () => {
+  const items = [1, 2, 3, 4, 5];
+  const notInitResult = Array.from(
+    accumulate((acc: number, curr) => acc + curr)(items)
+  );
+  assertEquals(notInitResult, [1, 3, 6, 10, 15]);
+  const initResult = Array.from(
+    accumulate((acc, curr) => acc + curr, 10)(items)
+  );
+  assertEquals(initResult, [10, 11, 13, 16, 20, 25]);
+  const asyncResult = Promise.all(
+    accumulate(
+      async (acc: Promise<number>, curr: number) => (await acc) + curr,
+      Promise.resolve(0)
+    )(items)
+  );
+  asyncResult.then((res) => assertEquals(res, [0, 1, 3, 6, 10, 15]));
+  const asyncItems = items.map((i) => Promise.resolve(i));
+  const asyncItemsResult = Promise.all(
+    accumulate(
+      async (acc: Promise<number>, curr: Promise<number>) =>
+        (await acc) + (await curr),
+      Promise.resolve(0)
+    )(asyncItems)
+  );
+  asyncItemsResult.then((res) => assertEquals(res, [0, 1, 3, 6, 10, 15]));
+});
 
 Deno.test("count", () => {
   const counter = count(-10, 5);
