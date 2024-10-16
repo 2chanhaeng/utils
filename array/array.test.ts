@@ -1,5 +1,10 @@
 import { assertEquals } from "@std/assert";
-import { slice, toArray } from "./mod.ts";
+import { join, slice, toArray } from "./mod.ts";
+
+Deno.test("join", () => {
+  const arr = [1, 2, 3];
+  assertEquals(join(", ")(arr), "1, 2, 3");
+});
 
 Deno.test("slice", () => {
   const arr = [1, 2, 3, 4, 5];
