@@ -12,6 +12,7 @@
     "iter": "./iter/mod.ts",
     "pipe": "./pipe/mod.ts",
     "pred": "./pred/mod.ts",
+    "promise": "./promise/mod.ts",
     "record": "./record/mod.ts",
     "types": "./types/mod.ts",
     "@std/assert": "jsr:@std/assert@1"
