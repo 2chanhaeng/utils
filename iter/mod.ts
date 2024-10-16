@@ -6,4 +6,5 @@ export { default as fold } from "./fold.ts";
 export { default as map } from "./map.ts";
 export { default as range } from "./range.ts";
 export { default as reduce } from "./reduce.ts";
+export { default as takeWhile } from "./takeWhile.ts";
 export { default as zip } from "./zip.ts";
