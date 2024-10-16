@@ -14,6 +14,7 @@ import {
   zip,
 } from "./mod.ts";
 import { toArray } from "array";
+import chain from "./chain.ts";
 
 Deno.test("accumulate", () => {
   const items = [1, 2, 3, 4, 5];
@@ -51,6 +52,16 @@ Deno.test("batch", () => {
   const items = [1, 2, 3, 4, 5];
   const batched = Array.from(map(toArray)(batch(2)(items)));
   assertEquals(batched, [[1, 2], [3, 4], [5]]);
+});
+
+Deno.test("chain", () => {
+  const items1 = [1, 2, 3];
+  const items2 = "abc";
+  const chained = Array.from(chain(items1, items2));
+  assertEquals(chained, [1, 2, 3, "a", "b", "c"]);
+  const items3 = Iterator.from([true, false]);
+  const chained2 = Array.from(chain(items1, items2, items3));
+  assertEquals(chained2, [1, 2, 3, "a", "b", "c", true, false]);
 });
 
 Deno.test("count", () => {
