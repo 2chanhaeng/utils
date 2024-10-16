@@ -15,6 +15,7 @@
     "pred": "./pred/mod.ts",
     "promise": "./promise/mod.ts",
     "record": "./record/mod.ts",
+    "set": "./set/mod.ts",
     "str": "./str/mod.ts",
     "types": "./types/mod.ts",
     "@std/assert": "jsr:@std/assert@1"
