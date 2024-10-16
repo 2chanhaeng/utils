@@ -29,7 +29,6 @@ Deno.test("enumerate", () => {
 Deno.test("filter", () => {
   const items = [1, 2, 3, 4, 5];
   const result = Array.from(filter((x: number) => x % 2 === 0)(items));
-  console.log(result);
   assertEquals(result, [2, 4]);
 });
 
@@ -60,6 +59,19 @@ Deno.test("reduce", () => {
   assertEquals(result, 25);
   const stringResult = reduce((acc: string, x: number) => acc + x, "")(items);
   assertEquals(stringResult, "12345");
+  const initPromiseResult = reduce(
+    async (a, b) => (await a) + b,
+    Promise.resolve(0),
+    items
+  );
+  initPromiseResult.then((res) => assertEquals(res, 15));
+  const promiseItems = items.map((i) => Promise.resolve(i));
+  const itemPromiseResult2 = reduce(
+    async (a, b) => (await a) + (await b),
+    Promise.resolve(0),
+    promiseItems
+  );
+  itemPromiseResult2.then((res) => assertEquals(res, 15));
 });
 
 Deno.test("zip", () => {
