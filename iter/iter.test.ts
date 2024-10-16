@@ -21,6 +21,10 @@ Deno.test("accumulate", () => {
     accumulate((acc, curr) => acc + curr, 10)(items)
   );
   assertEquals(initResult, [10, 11, 13, 16, 20, 25]);
+  const indexResult = Array.from(
+    accumulate((acc, curr, index) => acc + curr + index, 10)(items)
+  );
+  assertEquals(indexResult, [10, 11, 14, 19, 26, 35]);
   const asyncResult = Promise.all(
     accumulate(
       async (acc: Promise<number>, curr: number) => (await acc) + curr,
