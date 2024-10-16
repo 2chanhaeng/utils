@@ -1,6 +1,7 @@
 import { assertEquals } from "@std/assert";
 import {
   accumulate,
+  batch,
   count,
   enumerate,
   filter,
@@ -12,6 +13,7 @@ import {
   takeWhile,
   zip,
 } from "./mod.ts";
+import { toArray } from "array";
 
 Deno.test("accumulate", () => {
   const items = [1, 2, 3, 4, 5];
@@ -43,6 +45,12 @@ Deno.test("accumulate", () => {
     )(asyncItems)
   );
   asyncItemsResult.then((res) => assertEquals(res, [0, 1, 3, 6, 10, 15]));
+});
+
+Deno.test("batch", () => {
+  const items = [1, 2, 3, 4, 5];
+  const batched = Array.from(map(toArray)(batch(2)(items)));
+  assertEquals(batched, [[1, 2], [3, 4], [5]]);
 });
 
 Deno.test("count", () => {
@@ -109,6 +117,13 @@ Deno.test("reduce", () => {
   itemPromiseResult2.then((res) => assertEquals(res, 15));
 });
 
+Deno.test("take", () => {
+  const items = [1, 2, 3, 4, 5];
+  const result = Array.from(take(3)(items));
+  assertEquals(result, [1, 2, 3]);
+  const lesserItems = Array.from(take(6)(items));
+  assertEquals(lesserItems, [1, 2, 3, 4, 5]);
+});
 
 Deno.test("takeWhile", () => {
   const items = [1, 2, 3, 4, 5, 4, 3, 2, 1];
