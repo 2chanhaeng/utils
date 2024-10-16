@@ -1,5 +1,12 @@
 import { assertEquals } from "@std/assert";
-import { tap, tapLog } from "./mod.ts";
+import { forEach, tap, tapLog } from "./mod.ts";
+
+Deno.test("forEach", () => {
+  const arr: number[] = [];
+  const push = forEach((x: number) => arr.push(x));
+  push([1, 2, 3]);
+  assertEquals(arr, [1, 2, 3]);
+});
 
 Deno.test("tap", () => {
   const arr: number[] = [];
