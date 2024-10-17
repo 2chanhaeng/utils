@@ -1,7 +1,9 @@
 import enumerate from "./enumerate.ts";
 
-export default function takeWhile<T>(f: (x: T, i: number) => boolean) {
-  return function* (iter: Iterable<T>) {
+export default function takeWhile<T>(
+  f: (x: T, i: number) => boolean
+): (iter: Iterable<T>) => Generator<T> {
+  return function* (iter: Iterable<T>): Generator<T> {
     yield* takeWhileGen(f, enumerate(iter));
   };
 }

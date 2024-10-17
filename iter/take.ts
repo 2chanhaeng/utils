@@ -1,10 +1,12 @@
-export default function take(n: number) {
-  return function* <T>(iter: Iterable<T>) {
+export default function take(
+  n: number
+): <T>(iter: Iterable<T>) => Generator<T> {
+  return function* <T>(iter: Iterable<T>): Generator<T> {
     yield* taker(Iterator.from(iter))(n);
   };
 }
 
-function taker<T>(iter: IteratorObject<T>) {
+function taker<T>(iter: IteratorObject<T>): (n: number) => Generator<T> {
   return function* takerInner(n: number): Generator<T> {
     if (n <= 0) return;
     const curr = iter.next();
