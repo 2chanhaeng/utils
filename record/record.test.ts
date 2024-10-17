@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { bind, get, merge, pick } from "./mod.ts";
+import { bind, bindTo, get, merge, pick } from "./mod.ts";
 import pipe from "pipe";
 
 Deno.test("bind", () => {
@@ -9,6 +9,14 @@ Deno.test("bind", () => {
     bind("bar", ({ foo }) => foo.length)
   )();
   assertEquals(bound, { foo: "bar", bar: 3 });
+});
+
+Deno.test("bindTo", () => {
+  const value = "bar" as const;
+  const bound = bindTo("foo")(value);
+  assertEquals(bound, { foo: "bar" });
+  const bound2 = bindTo("baz")(bound);
+  assertEquals(bound2, { baz: { foo: "bar" } });
 });
 
 Deno.test("get", () => {
