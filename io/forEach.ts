@@ -1,5 +1,7 @@
-import tap from "io/tap.ts";
-import map from "iter/map.ts";
+import { toArray } from "array";
+import tap from "./tap.ts";
+import { map } from "iter";
+import pipe from "pipe";
 
 /**
  * ```haskell
@@ -11,5 +13,5 @@ import map from "iter/map.ts";
 export default function forEach<T>(
   f: (x: T) => unknown
 ): (x: Iterable<T>) => Iterable<T> {
-  return tap<Iterable<T>>(map(f));
+  return tap<Iterable<T>>(pipe(structuredClone, map(f), toArray));
 }
