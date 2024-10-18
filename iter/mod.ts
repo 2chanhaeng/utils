@@ -4,6 +4,7 @@ export { default as batch } from "./batch.ts";
 export { default as chain } from "./chain.ts";
 export { default as count } from "./count.ts";
 export { default as drop } from "./drop.ts";
+export { default as dropWhile } from "./dropWhile.ts";
 export { default as enumerate } from "./enumerate.ts";
 export { default as filter } from "./filter.ts";
 export { default as fold } from "./fold.ts";
