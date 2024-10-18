@@ -1,5 +1,26 @@
 import { assertEquals } from "@std/assert";
-import { delay, toAsync } from "./mod.ts";
+import { asyncBatches, delay, toAsync } from "./mod.ts";
+
+Deno.test("asyncBatches", async () => {
+  const sec = () => new Date().getSeconds();
+
+  // An async function that logs the current second after a delay.
+  const secWithDelay = async (_: unknown) => {
+    await delay(1000); // 1-second delay
+    return sec();
+  };
+
+  const iters = [
+    [1, 2, 3],
+    [4, 5],
+    [6, 7, 8],
+  ];
+  const start = sec();
+  const results = (await Array.fromAsync(asyncBatches(secWithDelay)(iters)))
+    .map((x) => x.reduce((a, b) => (a === b ? a : NaN)))
+    .map((x) => x - start);
+  assertEquals(results, [1, 2, 3]);
+});
 
 Deno.test("delay", async () => {
   const start = Date.now();
