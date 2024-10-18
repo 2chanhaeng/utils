@@ -4,6 +4,9 @@ import enumerate from "./enumerate.ts";
 /**
  * ```haskell
  * takeWhile::(a -> Bool) -> [a] -> [a]
+ * ```
+ *
+ * Takes elements from the iterable while the predicate is true.
  */
 export default function takeWhile<T>(
   f: Predicate<T> | PredicateLike<T>
