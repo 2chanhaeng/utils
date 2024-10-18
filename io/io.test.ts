@@ -14,10 +14,13 @@ Deno.test("forEach", () => {
 });
 
 Deno.test("tap", () => {
-  const arr: number[] = [];
-  const push = tap((x: number) => arr.push(x));
-  assertEquals(push(1), 1);
-  assertEquals(arr, [1]);
+  const arr = [1, 2, 3];
+  const side: number[] = [];
+  const pushPopped = tap((x: number[]) => side.push(x.pop()!));
+  pushPopped(arr);
+  assertEquals(arr, [1, 2, 3]);
+  assertEquals(side, [3]);
+});
 
 Deno.test("tapAsync", async () => {
   const arr = [1, 2, 3];
