@@ -1,10 +1,11 @@
 /**
  * ```haskell
- * chain::[[a]] -> [a]
+ * flat::[[a]] -> [a]
  * ```
- * Chain multiple iterables into one.
+ * Flat multiple iterables into one.
+ * @alias chain
  */
-export default function* chain<T extends Iterable<unknown>[]>(
+export default function* flat<T extends Iterable<unknown>[]>(
   ...iters: T
 ): Generator<T extends Iterable<infer U>[] ? U : never> {
   for (const iter of iters)
