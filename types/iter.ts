@@ -6,6 +6,17 @@ export type Mappable<T> =
   | { map: <U>(f: Mapper<T, U>) => Mappable<U> };
 
 export type Predicate<T> = (x: T, i: number) => boolean;
+/**
+ * Function that returns any value except functions.
+ * Exclude functions that return a function to prevent mistakes.
+ */
+export type PredicateLike<T> = (
+  x: T,
+  i: number
+) => Exclude<unknown, (...x: unknown[]) => unknown>;
+/**
+ * Container that can be filtered.
+ */
 export type Filterable<T> =
   | Iterables<T>
   | { filter: (f: Predicate<T>) => Filterable<T> };
