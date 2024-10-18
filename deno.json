@@ -13,6 +13,8 @@
     "apply/": "./apply/",
     "array": "./array/mod.ts",
     "array/": "./array/",
+    "atom": "./atom/mod.ts",
+    "atom/": "./atom/",
     "io": "./io/mod.ts",
     "io/": "./io/",
     "iter": "./iter/mod.ts",

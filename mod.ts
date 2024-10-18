@@ -1,6 +1,8 @@
 export { default as apply } from "./apply/mod.ts";
 export * from "./array/mod.ts";
 export * as array from "./array/mod.ts";
+export * from "./atom/mod.ts";
+export * as atom from "./atom/mod.ts";
 export * from "./io/mod.ts";
 export * as io from "./io/mod.ts";
 export * from "./iter/mod.ts";
