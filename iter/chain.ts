@@ -1,3 +1,9 @@
+/**
+ * ```haskell
+ * chain::[[a]] -> [a]
+ * ```
+ * Chain multiple iterables into one.
+ */
 export default function* chain<T extends Iterable<unknown>[]>(
   ...iters: T
 ): Generator<T extends Iterable<infer U>[] ? U : never> {

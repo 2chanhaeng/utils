@@ -1,5 +1,12 @@
-import isObject from "../pred/isObject.ts";
+import { isObject } from "pred";
 
+/**
+ * ```haskell
+ * pick::[a] -> { a: b } -> { a: b }
+ * ```
+ * Returns a new object with only the specified keys.
+ * Throws a TypeError if the input is not an object.
+ */
 export default function pick<Key extends PropertyKey>(keys: Key[]) {
   return <T extends { [K in Key]: Pick<T, Key>[K] }>(
     obj: T

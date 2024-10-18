@@ -1,6 +1,12 @@
 import { toArray } from "array";
 import take from "./take.ts";
 
+/**
+ * ```haskell
+ * batch::Int -> [a] -> [[a]]
+ * ```
+ * Split an iterable into batches of given size.
+ */
 export default function batch(
   size: number
 ): <T>(iter: Iterable<T>) => Generator<T[]> {

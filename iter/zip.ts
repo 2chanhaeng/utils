@@ -1,5 +1,11 @@
 import type { ItersItems } from "types";
 
+/**
+ * ```haskell
+ * zip::([a], [b], ...) -> [a, b, ...]
+ * ```
+ * Zip iterables together.
+ */
 export default function zip<T extends Iterable<unknown>[]>(
   ...iters: T
 ): Generator<ItersItems<T>> {

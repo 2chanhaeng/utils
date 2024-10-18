@@ -1,5 +1,12 @@
 import enumerate from "./enumerate.ts";
 
+/**
+ * ```haskell
+ * accumulate::((a, b) -> a) -> a -> [b] -> [a]
+ * accumulate::((a, b, Int) -> a) -> a -> [b] -> [a]
+ * ```
+ * Returns an iterator that accumulates the elements of the iterable.
+ */
 export default function accumulate<T>(
   f: (acc: T, curr: T, index: number) => T
 ): (iter: Iterable<T>) => Generator<T>;

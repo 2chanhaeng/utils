@@ -1,6 +1,12 @@
 import { isIterator } from "pred";
 import reduce from "./reduce.ts";
 
+/**
+ * ```haskell
+ * fold::(a, a) -> [a] -> a
+ * fold::(a, a, Int) -> [a] -> a
+ * {@link reduce} with the first element as the initial value.
+ */
 export default function fold<T>(
   f: (acc: T, x: T, i: number) => T
 ): (iter: Iterable<T>) => T;

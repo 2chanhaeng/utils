@@ -1,3 +1,9 @@
+/**
+ * ```haskell
+ * range::(Int, Int, Int) -> [Int]
+ * ```
+ * Range of integers from start to end with step.
+ */
 export default function range(start: number): Generator<number>;
 export default function range(start: number, end: number): Generator<number>;
 export default function range(

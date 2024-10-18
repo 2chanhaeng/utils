@@ -1,6 +1,12 @@
 import count from "./count.ts";
 import zip from "./zip.ts";
 
+/**
+ * ```haskell
+ * enumerate::[a] -> [(a, Int)]
+ * ```
+ * Enumerate the elements of an iterable.
+ */
 export default function* enumerate<T>(
   iter: Iterable<T>
 ): Generator<[T, number]> {

@@ -1,5 +1,15 @@
 import { isPromise } from "pred";
 
+/**
+ * ```haskell
+ * apply::a -> (a -> b) -> b
+ * apply::Promise a -> (a -> b) -> Promise b
+ * apply::a -> (a -> Promise b) -> Promise b
+ * apply::Promise a -> (a -> Promise b) -> Promise b
+ * ```
+ *
+ * Apply a value to a function. If the value is a promise, the function will be applied to the resolved value of the promise.
+ */
 function apply<T, U>(
   x: Promise<T>,
   f: (arg: Awaited<T>) => Promise<U>
