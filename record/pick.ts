@@ -7,7 +7,11 @@ import { isObject } from "pred";
  * Returns a new object with only the specified keys.
  * Throws a TypeError if the input is not an object.
  */
-export default function pick<Key extends PropertyKey>(keys: Key[]) {
+export default function pick<Key extends PropertyKey>(
+  keys: Key[]
+): <T extends { [K in Key]: Pick<T, Key>[K] }>(
+  obj: T
+) => { [K in Key]: Pick<T, Key>[K] } {
   return <T extends { [K in Key]: Pick<T, Key>[K] }>(
     obj: T
   ): { [K in Key]: Pick<T, Key>[K] } => {

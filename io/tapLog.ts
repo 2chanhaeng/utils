@@ -7,6 +7,6 @@ import tap from "./tap.ts";
  * Log the value with tag and return the original value.
  * `console.log`
  */
-export default function tapLog<T>(tag: unknown) {
+export default function tapLog<T>(tag: unknown): (x: T) => T {
   return tap((x: T) => console.log(tag, x));
 }

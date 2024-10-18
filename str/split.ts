@@ -4,6 +4,6 @@
  * ```
  * Splits a string by a separator.
  */
-export default function split(separator: string) {
+export default function split(separator: string): (x: string) => string[] {
   return (x: string) => x.split(separator);
 }
