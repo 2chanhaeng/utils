@@ -4,6 +4,8 @@
  * ```
  * Unions two sets.
  */
-export default function union<T>(set1: Set<T>) {
-  return (set2: Set<T>) => set1.union(set2);
+export default function union<T>(
+  set1: Set<T>
+): <S>(set2: Set<S>) => Set<T | S> {
+  return <S>(set2: Set<S>) => set1.union(set2);
 }
