@@ -1,7 +1,12 @@
+import type { Predicate, PredicateLike } from "types";
 import enumerate from "./enumerate.ts";
 
+/**
+ * ```haskell
+ * takeWhile::(a -> Bool) -> [a] -> [a]
+ */
 export default function takeWhile<T>(
-  f: (x: T, i: number) => boolean
+  f: Predicate<T> | PredicateLike<T>
 ): (iter: Iterable<T>) => Generator<T> {
   return function* (iter: Iterable<T>): Generator<T> {
     yield* takeWhileGen(f, enumerate(iter));
@@ -9,7 +14,7 @@ export default function takeWhile<T>(
 }
 
 function* takeWhileGen<T>(
-  f: (x: T, i: number) => boolean,
+  f: Predicate<T> | PredicateLike<T>,
   iter: IteratorObject<[T, number]>
 ): Generator<T> {
   const curr = iter.next();
