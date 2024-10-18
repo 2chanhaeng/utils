@@ -1,6 +1,7 @@
 import { assertEquals } from "@std/assert";
 import {
   accumulate,
+  append,
   batch,
   count,
   enumerate,
@@ -46,6 +47,12 @@ Deno.test("accumulate", () => {
     )(asyncItems)
   );
   asyncItemsResult.then((res) => assertEquals(res, [0, 1, 3, 6, 10, 15]));
+});
+
+Deno.test("append", () => {
+  const items = [1, 2, 3];
+  const appended = Array.from(append(4)(items));
+  assertEquals(appended, [1, 2, 3, 4]);
 });
 
 Deno.test("batch", () => {

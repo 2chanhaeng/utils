@@ -1,4 +1,5 @@
 export { default as accumulate } from "./accumulate.ts";
+export { default as append } from "./append.ts";
 export { default as batch } from "./batch.ts";
 export { default as chain } from "./chain.ts";
 export { default as count } from "./count.ts";
