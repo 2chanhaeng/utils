@@ -1,6 +1,12 @@
 import type { Filterable } from "types";
 import isObject from "./isObject.ts";
 
-export default function isFilterable<T>(iter: unknown): iter is Filterable<T> {
-  return isObject(iter) && "filter" in iter;
+/**
+ * ```haskell
+ * isFilterable:: a -> boolean
+ * ```
+ * Returns true if the input has `filter` method.
+ */
+export default function isFilterable<T>(a: unknown): a is Filterable<T> {
+  return isObject(a) && "filter" in a && typeof a.filter === "function";
 }

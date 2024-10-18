@@ -1,8 +1,11 @@
-import type { Iterables } from "types";
+import isObject from "pred/isObject.ts";
 
-export default function isIterable<T>(iter: unknown): iter is Iterables<T> {
-  return (
-    Array.isArray(iter) ||
-    (typeof iter === "object" && iter !== null && Symbol.iterator in iter)
-  );
+/**
+ * ```haskell
+ * isIterable:: a -> boolean
+ * ```
+ * Returns true if the input object has Symbol.iterator.
+ */
+export default function isIterable<T>(a: unknown): a is Iterable<T> {
+  return isObject(a) && Symbol.iterator in a;
 }

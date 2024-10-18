@@ -1,6 +1,12 @@
 import type { Mappable } from "types";
 import isObject from "./isObject.ts";
 
-export default function isMappable<T>(iter: unknown): iter is Mappable<T> {
-  return isObject(iter) && "map" in iter;
+/**
+ * ```haskell
+ * isMappable:: a -> boolean
+ * ```
+ * Returns true if the input has `map` method.
+ */
+export default function isMappable<T>(a: unknown): a is Mappable<T> {
+  return isObject(a) && "map" in a && typeof a.map === "function";
 }

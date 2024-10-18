@@ -1,6 +1,12 @@
 import type { Reducible } from "types";
 import isObject from "./isObject.ts";
 
-export default function isReducible<T>(iter: unknown): iter is Reducible<T> {
-  return isObject(iter) && "reduce" in iter;
+/**
+ * ```haskell
+ * isReducible:: a -> boolean
+ * ```
+ * Returns true if the input has `reduce` method.
+ */
+export default function isReducible<T>(a: unknown): a is Reducible<T> {
+  return isObject(a) && "reduce" in a && typeof a.reduce === "function";
 }
