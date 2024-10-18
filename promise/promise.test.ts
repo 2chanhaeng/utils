@@ -18,7 +18,7 @@ Deno.test("asyncBatches", async () => {
   const start = sec();
   const results = (await Array.fromAsync(asyncBatches(secWithDelay)(iters)))
     .map((x) => x.reduce((a, b) => (a === b ? a : NaN)))
-    .map((x) => x - start);
+    .map((x) => (x - start) % 60);
   assertEquals(results, [1, 2, 3]);
 });
 

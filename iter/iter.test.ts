@@ -83,6 +83,9 @@ Deno.test("drop", () => {
   const items = [1, 2, 3, 4, 5];
   const dropped = Array.from(drop(2)(items));
   assertEquals(dropped, [3, 4, 5]);
+  const empty = Array.from(drop(5)(items));
+  assertEquals(empty, []);
+});
 
 Deno.test("dropWhile", () => {
   const items = [1, 2, 3, 4, 5, 4, 3, 2, 1];
@@ -169,6 +172,8 @@ Deno.test("takeWhile", () => {
   const items = [1, 2, 3, 4, 5, 4, 3, 2, 1];
   const result = Array.from(takeWhile((x: number) => x < 4)(items));
   assertEquals(result, [1, 2, 3]);
+  const empty = Array.from(takeWhile((x: number) => x < 0)(items));
+  assertEquals(empty, []);
 });
 
 Deno.test("zip", () => {
