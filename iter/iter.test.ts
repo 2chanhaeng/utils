@@ -8,6 +8,7 @@ import {
   filter,
   fold,
   map,
+  prepend,
   range,
   reduce,
   take,
@@ -103,6 +104,12 @@ Deno.test("map", () => {
   const items = [1, 2, 3, 4, 5];
   const result = Array.from(map((x: number) => x * 2)(items));
   assertEquals(result, [2, 4, 6, 8, 10]);
+});
+
+Deno.test("prepend", () => {
+  const items = [1, 2, 3];
+  const appended = Array.from(prepend(0)(items));
+  assertEquals(appended, [0, 1, 2, 3]);
 });
 
 Deno.test("range", () => {
