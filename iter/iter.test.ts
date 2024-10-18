@@ -4,6 +4,7 @@ import {
   append,
   batch,
   count,
+  drop,
   enumerate,
   filter,
   fold,
@@ -75,6 +76,12 @@ Deno.test("chain", () => {
 Deno.test("count", () => {
   const counter = count(-10, 5);
   for (let i = -10; i < 10; i += 5) assertEquals(i, counter.next().value);
+});
+
+Deno.test("drop", () => {
+  const items = [1, 2, 3, 4, 5];
+  const dropped = Array.from(drop(2)(items));
+  assertEquals(dropped, [3, 4, 5]);
 });
 
 Deno.test("enumerate", () => {
