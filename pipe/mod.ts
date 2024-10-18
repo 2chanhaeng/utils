@@ -1,6 +1,13 @@
 import { reduce } from "iter";
 import apply from "apply";
 
+/**
+ * ```haskell
+ * pipe::(a -> b) -> (b -> c) -> ... -> (y -> z) -> a -> z
+ * ```
+ * Compose functions reverse order.
+ */
+function pipe(): <T0 extends unknown[]>(...x: T0) => T0; // To prevent error when start to write pipe()
 function pipe<T0 extends unknown[], S>(
   f0: (...x: T0) => S
 ): (...x: T0) => PipeReturn<[T0], S>;
@@ -77,11 +84,11 @@ function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, T8, T9, S>(
   f9: (x: Awaited<T9>) => S
 ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7, T8, T9], S>;
 function pipe(
-  ...[f0, ...fns]: [
-    (...x: unknown[]) => unknown,
-    ...((x: unknown) => unknown)[]
-  ]
+  ...[f0, ...fns]:
+    | []
+    | [(...x: unknown[]) => unknown, ...((x: unknown) => unknown)[]]
 ) {
+  if (f0 === undefined) return (...x: unknown[]) => x;
   return (...x: Parameters<typeof f0>) =>
     reduce(apply, f0(...x), fns) as HasReturnPromise<
       Init<typeof fns>
