@@ -9,6 +9,7 @@ import {
   dropWhile,
   enumerate,
   filter,
+  flat,
   fold,
   map,
   prepend,
@@ -110,6 +111,19 @@ Deno.test("filter", () => {
   const items = [1, 2, 3, 4, 5];
   const result = Array.from(filter((x: number) => x % 2 === 0)(items));
   assertEquals(result, [2, 4]);
+});
+
+Deno.test("flat", () => {
+  const nestedArrays = [
+    [1, 2],
+    [[[[3]]], [4, 5]],
+  ] as const;
+  const flat1 = Array.from(flat(1)(nestedArrays));
+  assertEquals(flat1, [1, 2, [[[3]]], [4, 5]]);
+  const flat2 = Array.from(flat(2)(nestedArrays));
+  assertEquals(flat2, [1, 2, [[3]], 4, 5]);
+  const flatAll = Array.from(flat()(nestedArrays));
+  assertEquals(flatAll, [1, 2, 3, 4, 5]);
 });
 
 Deno.test("fold", () => {
