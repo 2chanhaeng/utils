@@ -1,5 +1,10 @@
-import { assertEquals } from "@std/assert";
-import { always, identity } from "./mod.ts";
+import {
+  assertEquals,
+  assertNotEquals,
+  assertNotStrictEquals,
+  assertStrictEquals,
+} from "@std/assert";
+import { always, identity, tryCopy } from "./mod.ts";
 
 Deno.test("always", () => {
   const one = 1;
@@ -17,4 +22,15 @@ Deno.test("always", () => {
 Deno.test("identity", () => {
   const one = 1;
   assertEquals(one, identity(one));
+});
+
+Deno.test("tryCopy", () => {
+  const arr = [1, 2, [3]];
+  const cloned = structuredClone(arr);
+  assertEquals(arr, cloned);
+  assertNotStrictEquals(arr, cloned);
+  (arr.at(2) as number[]).push(4);
+  assertNotEquals(cloned, tryCopy(arr));
+  const iter = arr.values();
+  const clonedIter = tryCopy(iter);
 });
