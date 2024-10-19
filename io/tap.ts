@@ -8,7 +8,7 @@ import apply from "apply";
  */
 export default function tap<T>(f: (x: T) => unknown): (x: T) => T {
   return (x: T) => {
-    apply(structuredClone(x), f);
+    apply(x, f);
     return x;
   };
 }
