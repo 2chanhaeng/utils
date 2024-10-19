@@ -3,12 +3,12 @@ import {
   accumulate,
   append,
   batch,
+  chain,
   count,
   drop,
   dropWhile,
   enumerate,
   filter,
-  flat,
   fold,
   map,
   prepend,
@@ -64,6 +64,16 @@ Deno.test("batch", () => {
   assertEquals(batched, [[1, 2], [3, 4], [5]]);
 });
 
+Deno.test("chain", () => {
+  const items1 = [1, 2, 3];
+  const items2 = "abc";
+  const chained = Array.from(chain([items1, items2]));
+  assertEquals(chained, [1, 2, 3, "a", "b", "c"]);
+  const items3 = Iterator.from([true, false]);
+  const chained2 = Array.from(chain([items1, items2, items3]));
+  assertEquals(chained2, [1, 2, 3, "a", "b", "c", true, false]);
+});
+
 Deno.test("count", () => {
   const counter = count(-10, 5);
   for (let i = -10; i < 10; i += 5) assertEquals(i, counter.next().value);
@@ -100,16 +110,6 @@ Deno.test("filter", () => {
   const items = [1, 2, 3, 4, 5];
   const result = Array.from(filter((x: number) => x % 2 === 0)(items));
   assertEquals(result, [2, 4]);
-});
-
-Deno.test("flat", () => {
-  const items1 = [1, 2, 3];
-  const items2 = "abc";
-  const flatten = Array.from(flat([items1, items2]));
-  assertEquals(flatten, [1, 2, 3, "a", "b", "c"]);
-  const items3 = Iterator.from([true, false]);
-  const flatten2 = Array.from(flat([items1, items2, items3]));
-  assertEquals(flatten2, [1, 2, 3, "a", "b", "c", true, false]);
 });
 
 Deno.test("fold", () => {
