@@ -114,16 +114,14 @@ Deno.test("filter", () => {
 });
 
 Deno.test("flat", () => {
-  const nestedArrays = [
-    [1, 2],
-    [[[[3]]], [4, 5]],
-  ] as const;
-  const flat1 = Array.from(flat(1)(nestedArrays));
-  assertEquals(flat1, [1, 2, [[[3]]], [4, 5]]);
-  const flat2 = Array.from(flat(2)(nestedArrays));
-  assertEquals(flat2, [1, 2, [[3]], 4, 5]);
-  const flatAll = Array.from(flat()(nestedArrays));
-  assertEquals(flatAll, [1, 2, 3, 4, 5]);
+  const nestedArrays = () =>
+    [[[[[3]]], "45"], Iterator.from([true, false] as const)] as const;
+  const flat1 = Array.from(flat(1)(nestedArrays()));
+  assertEquals(flat1, [[[[3]]], "45", true, false]);
+  const flat2 = Array.from(flat(2)(nestedArrays()));
+  assertEquals(flat2, [[[3]], "4", "5", true, false]);
+  const flatAll = Array.from(flat()(nestedArrays()));
+  assertEquals(flatAll, [3, "4", "5", true, false]);
 });
 
 Deno.test("fold", () => {
