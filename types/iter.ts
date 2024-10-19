@@ -61,3 +61,10 @@ export type ItersItems<T extends Iterable<unknown>[]> = T extends []
       : [Item]
     : never
   : never;
+
+export type RecursiveFlat<T> = T extends string
+  ? string
+  : T extends Iterable<infer S>
+  ? RecursiveFlat<S>
+  : T;
+export type Item<T> = T extends Iterable<infer S> ? S : never;
