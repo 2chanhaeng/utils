@@ -1,5 +1,7 @@
 import { assertEquals } from "@std/assert";
 import { asyncBatches, delay, toAsync } from "./mod.ts";
+import { map } from "iter/mod.ts";
+import pipe from "pipe/mod.ts";
 
 Deno.test("asyncBatches", async () => {
   const sec = () => new Date().getSeconds();
@@ -30,10 +32,24 @@ Deno.test("delay", async () => {
 });
 
 Deno.test("toAsync", async () => {
+  const nonPromise = 1;
+  const resultNonPromise = await toAsync(nonPromise);
+  assertEquals(resultNonPromise, 1);
+  const promise = Promise.resolve(1);
+  const resultPromise = await toAsync(promise);
+  assertEquals(resultPromise, 1);
   const promises = [Promise.resolve(1), Promise.resolve(2)];
-  const result = await toAsync(promises);
-  assertEquals(result, [1, 2]);
-  const promiseses = [[Promise.resolve(1)], [Promise.resolve(2)]];
-  const result2 = await toAsync(promiseses.map(toAsync));
-  assertEquals(result2, [[1], [2]]);
+  const resultPromises = await toAsync(promises);
+  assertEquals(resultPromises, [1, 2]);
+  const promiseIter = Iterator.from(promises);
+  const result1 = await toAsync(promiseIter);
+  assertEquals(result1, [1, 2]);
+  const promisesArray = [[Promise.resolve(1)], [Promise.resolve(2)]];
+  const resultWithMapMethod = await toAsync(promisesArray.map(toAsync));
+  assertEquals(resultWithMapMethod, [[1], [2]]);
+  const resultWithPipe = await pipe(
+    map(toAsync<Promise<number>[]>),
+    toAsync
+  )(promisesArray);
+  assertEquals(resultWithPipe, [[1], [2]]);
 });
