@@ -68,3 +68,8 @@ export type RecursiveFlat<T> = T extends string
   ? RecursiveFlat<S>
   : T;
 export type Item<T> = T extends Iterable<infer S> ? S : never;
+export type ItemsItem<T> = T extends Iterable<infer S>
+  ? S extends Iterable<infer U>
+    ? U[]
+    : S
+  : never;
