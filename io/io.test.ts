@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { execute, forEach, tap, tapAsync, tapLog } from "./mod.ts";
+import { execute, forEach, tap, tapAsync, tapLen, tapLog } from "./mod.ts";
 
 Deno.test("execute", () => {
   const const1 = () => 1;
@@ -25,7 +25,9 @@ Deno.test("tap", () => {
 Deno.test("tapAsync", async () => {
   const arr = [1, 2, 3];
   const side: number[] = [];
-  const pushPopped = tapAsync(async (x: number[]) => side.push(x.pop()!));
+  const pushPopped = tapAsync((x: number[]) =>
+    Promise.resolve(side.push(x.pop()!))
+  );
   await pushPopped(arr);
   assertEquals(arr, [1, 2, 3]);
   assertEquals(side, [3]);

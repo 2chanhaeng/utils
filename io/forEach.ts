@@ -1,4 +1,5 @@
 import { toArray } from "array";
+import { tryCopy } from "atom";
 import tap from "./tap.ts";
 import { map } from "iter";
 import pipe from "pipe";
@@ -13,5 +14,5 @@ import pipe from "pipe";
 export default function forEach<T>(
   f: (x: T) => unknown
 ): (x: Iterable<T>) => Iterable<T> {
-  return tap<Iterable<T>>(pipe(map(f), toArray));
+  return tap<Iterable<T>>(pipe(tryCopy, map(f), toArray));
 }

@@ -1,4 +1,5 @@
 import apply from "apply";
+import { tryCopy } from "atom";
 
 /**
  * ```haskell
@@ -8,7 +9,7 @@ import apply from "apply";
  */
 export default function tap<T>(f: (x: T) => unknown): (x: T) => T {
   return (x: T) => {
-    apply(x, f);
+    apply(tryCopy(x), f);
     return x;
   };
 }
