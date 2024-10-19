@@ -31,6 +31,15 @@ Deno.test("tapAsync", async () => {
   assertEquals(side, [3]);
 });
 
+Deno.test("tapLen", () => {
+  const arr = [1, 2, 3];
+  const lengths: number[] = [];
+  const captureLength = tapLen((len: number) => lengths.push(len));
+  const captured = Array.from(captureLength(arr));
+  assertEquals(captured, [1, 2, 3]);
+  assertEquals(lengths, [3]);
+});
+
 declare global {
   interface Console {
     defaultLog?: typeof console.log;
