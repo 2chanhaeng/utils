@@ -1,4 +1,4 @@
-import type { Item } from "types";
+import type { ItemsItem } from "types";
 
 /**
  * ```haskell
@@ -8,7 +8,7 @@ import type { Item } from "types";
  *
  * @template T - A tuple of iterables.
  * @param {T} iters - An array of iterables to be chained.
- * @returns {Generator<FlatArray<Item<T>[], 1>>} A generator that yields elements from each iterable in sequence.
+ * @returns {Generator<ChainGen<T>>} A generator that yields elements from each iterable in sequence.
  *
  * @example
  * const iter1 = new Set([1, 2, 3]);
@@ -20,6 +20,8 @@ import type { Item } from "types";
  */
 export default function* chain<T extends Iterable<unknown>>(
   iters: T
-): Generator<FlatArray<Item<T>[], 1>> {
-  for (const iter of iters) yield* iter as Iterable<FlatArray<Item<T>[], 1>>;
+): Generator<ChainGen<T>> {
+  for (const iter of iters) yield* iter as Iterable<ChainGen<T>>;
 }
+
+type ChainGen<T> = FlatArray<ItemsItem<T>[], 1>;
