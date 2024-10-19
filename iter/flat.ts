@@ -1,5 +1,7 @@
 import type chain from "./chain.ts";
-import type { Item, RecursiveFlat } from "types";
+import type { ItemsItem, RecursiveFlat } from "types";
+import type { Inferior, Inferiors } from "types/number.ts";
+import { isChar, isIterable } from "pred";
 
 /**
  * ```haskell
@@ -19,49 +21,33 @@ import type { Item, RecursiveFlat } from "types";
  */
 export default function flat<N extends number>(depth: N = Infinity as N) {
   return function* <T extends Iterable<unknown>>(
-    iters: T
+    iters: T,
   ): Generator<FlatArrayOrRecursion<T, N>> {
-    yield* Array.from(iters).flat(depth) as Iterable<
-      FlatArrayOrRecursion<T, N>
-    >;
+    yield* flatter(depth, iters) as Iterable<FlatArrayOrRecursion<T, N>>;
   };
 }
 
-/**
- * @wtf
- * At first I wanted to implement `FlatArrayOrRecursion` like this:
- * `type FlatArrayOrRecursion<T, N> = N extends Infinity ? RecursiveFlat<T> : FlatArray<Item<T>[], N>`.
- * But TypeScript doesn't treat `Infinity` as a type, even though integers are. So,
- * I thought about it the other way around:
- * Let's limit `N` to the number of `N` we can put in a {@link FlatArray}.
- * The `N' of `FlatArray` could only be integers in the range -1 to 20,
- * so I decided to type these numbers as `FlatArrayNumber',
- * and use {@link RecursiveFlat} to recurse over them if there were more than `FlatArrayNumber'.
- * In the end, it doesn't look pretty, but it works anyway.
- */
-type FlatArrayOrRecursion<T, N> = N extends FlatArrayNumber
-  ? FlatArray<Item<T>[], N>
+function* flatter<N extends number, T>(
+  depth: N,
+  iters: T,
+): Generator<T | FlatArrayOrRecursion<T, N>> {
+  if (isChar(iters)) yield iters;
+  else if (!isIterable<FlatArrayOrRecursion<T, N>>(iters)) yield iters;
+  else if (depth <= 0) yield* iters;
+  else {
+    for (const iter of iters) {
+      yield* flatter(depth - 1, iter) as Iterable<FlatArrayOrRecursion<T, N>>;
+    }
+  }
+}
+
+type FlatArrayOrRecursion<T, N> = N extends Inferiors[number]
+  ? FlatIterable<ItemsItem<T>[], N>
   : RecursiveFlat<T>;
-type FlatArrayNumber =
-  | -1
-  | 0
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
-  | 13
-  | 14
-  | 15
-  | 16
-  | 17
-  | 18
-  | 19
-  | 20;
+type FlatIterable<Arr, Depth extends number> = {
+  done: Arr;
+  recur: Arr extends string ? string
+    : Arr extends Iterable<infer InnerArr>
+      ? FlatIterable<InnerArr, Inferior<Depth>>
+    : Arr;
+}[Depth extends -1 ? "done" : "recur"];
