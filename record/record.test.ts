@@ -6,7 +6,7 @@ Deno.test("bind", () => {
   const obj = { foo: "bar" } as const;
   const bound = pipe(
     () => obj,
-    bind("bar", ({ foo }) => foo.length)
+    bind("bar", ({ foo }) => foo.length),
   )();
   assertEquals(bound, { foo: "bar", bar: 3 });
 });

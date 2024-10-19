@@ -8,21 +8,21 @@ import enumerate from "./enumerate.ts";
  * Returns an iterator that accumulates the elements of the iterable.
  */
 export default function accumulate<T>(
-  f: (acc: T, curr: T, index: number) => T
+  f: (acc: T, curr: T, index: number) => T,
 ): (iter: Iterable<T>) => Generator<T>;
 export default function accumulate<T>(
   f: (acc: T, curr: T, index: number) => T,
-  init: T
+  init: T,
 ): (iter: Iterable<T>) => Generator<T>;
 export default function accumulate<T, S>(
   f: (acc: S, curr: T, index: number) => S,
-  init?: S
+  init?: S,
 ): (iter: Iterable<T>) => Generator<S>;
 export default function accumulate<T, S>(
   f: (acc: S | T, curr: T, index: number) => S | T,
-  init?: S | T
+  init?: S | T,
 ) {
-  if (init === undefined)
+  if (init === undefined) {
     return function* (iter: Iterable<T>) {
       const iterator = Iterator.from(iter);
       const first = iterator.next();
@@ -30,9 +30,10 @@ export default function accumulate<T, S>(
       yield* accumulator(
         f as (acc: T, curr: T, index: number) => T,
         first.value,
-        enumerate(iterator)
+        enumerate(iterator),
       );
     };
+  }
   return function* (iter: Iterable<T>) {
     yield* accumulator(f, init, enumerate(iter));
   };
@@ -40,7 +41,7 @@ export default function accumulate<T, S>(
 function* accumulator<T, S>(
   f: (acc: S, curr: T, index: number) => S,
   prev: S,
-  iter: IteratorObject<[T, number]>
+  iter: IteratorObject<[T, number]>,
 ): Generator<S> {
   yield prev;
   const curr = iter.next();

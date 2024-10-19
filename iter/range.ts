@@ -9,7 +9,7 @@ export default function range(start: number, end: number): Generator<number>;
 export default function range(
   start: number,
   end: number,
-  step: number
+  step: number,
 ): Generator<number>;
 export default function* range(start: number, end?: number, step = 1) {
   if (end === undefined) {

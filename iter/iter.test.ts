@@ -24,22 +24,22 @@ import { toArray } from "array";
 Deno.test("accumulate", () => {
   const items = [1, 2, 3, 4, 5];
   const notInitResult = Array.from(
-    accumulate((acc: number, curr) => acc + curr)(items)
+    accumulate((acc: number, curr) => acc + curr)(items),
   );
   assertEquals(notInitResult, [1, 3, 6, 10, 15]);
   const initResult = Array.from(
-    accumulate((acc, curr) => acc + curr, 10)(items)
+    accumulate((acc, curr) => acc + curr, 10)(items),
   );
   assertEquals(initResult, [10, 11, 13, 16, 20, 25]);
   const indexResult = Array.from(
-    accumulate((acc, curr, index) => acc + curr + index, 10)(items)
+    accumulate((acc, curr, index) => acc + curr + index, 10)(items),
   );
   assertEquals(indexResult, [10, 11, 14, 19, 26, 35]);
   const asyncResult = Promise.all(
     accumulate(
       async (acc: Promise<number>, curr: number) => (await acc) + curr,
-      Promise.resolve(0)
-    )(items)
+      Promise.resolve(0),
+    )(items),
   );
   asyncResult.then((res) => assertEquals(res, [0, 1, 3, 6, 10, 15]));
   const asyncItems = items.map((i) => Promise.resolve(i));
@@ -47,8 +47,8 @@ Deno.test("accumulate", () => {
     accumulate(
       async (acc: Promise<number>, curr: Promise<number>) =>
         (await acc) + (await curr),
-      Promise.resolve(0)
-    )(asyncItems)
+      Promise.resolve(0),
+    )(asyncItems),
   );
   asyncItemsResult.then((res) => assertEquals(res, [0, 1, 3, 6, 10, 15]));
 });
@@ -160,14 +160,14 @@ Deno.test("reduce", () => {
   const initPromiseResult = reduce(
     async (a, b) => (await a) + b,
     Promise.resolve(0),
-    items
+    items,
   );
   initPromiseResult.then((res) => assertEquals(res, 15));
   const promiseItems = items.map((i) => Promise.resolve(i));
   const itemPromiseResult2 = reduce(
     async (a, b) => (await a) + (await b),
     Promise.resolve(0),
-    promiseItems
+    promiseItems,
   );
   itemPromiseResult2.then((res) => assertEquals(res, 15));
 });

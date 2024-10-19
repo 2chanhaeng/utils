@@ -19,7 +19,7 @@ import type { ItemsItem } from "types";
  * // Output: [1, 2, 3, 'a', 'b', 'c']
  */
 export default function* chain<T extends Iterable<unknown>>(
-  iters: T
+  iters: T,
 ): Generator<ChainGen<T>> {
   for (const iter of iters) yield* iter as Iterable<ChainGen<T>>;
 }

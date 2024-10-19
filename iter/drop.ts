@@ -5,7 +5,7 @@
  * Drop the first n elements of an iterable.
  */
 export default function drop(
-  n: number
+  n: number,
 ): <T>(iter: Iterable<T>) => Generator<T> {
   return function* <T>(iter: Iterable<T>): Generator<T> {
     yield* dropper(Iterator.from(iter))(n);

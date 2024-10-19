@@ -13,7 +13,7 @@ export default function zip<T extends Iterable<unknown>[]>(
 }
 
 function* zipper<T extends IteratorObject<unknown>[]>(
-  iterators: T
+  iterators: T,
 ): Generator<ItersItems<T>> {
   const results = iterators.map((iterator) => iterator.next());
   if (results.some((result) => result.done)) return;

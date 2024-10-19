@@ -44,7 +44,7 @@ import pipe from "pipe";
  * // Item: 6, Second: 3, Item: 7, Second: 3, Item: 8, Second: 3
  */
 export default function asyncBatches<T, S>(
-  f: (a: T) => Promise<S>
+  f: (a: T) => Promise<S>,
 ): (iters: Iterable<Iterable<T>>) => Generator<Promise<S[]>> {
   return pipe(Iterator.from, map(pipe(map(f), Array.fromAsync<S>)));
 }

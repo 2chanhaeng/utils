@@ -49,7 +49,7 @@ Deno.test("toAsync", async () => {
   assertEquals(resultWithMapMethod, [[1], [2]]);
   const resultWithPipe = await pipe(
     map(toAsync<Promise<number>[]>),
-    toAsync
+    toAsync,
   )(promisesArray);
   assertEquals(resultWithPipe, [[1], [2]]);
 });

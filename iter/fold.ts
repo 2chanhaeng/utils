@@ -8,15 +8,15 @@ import reduce from "./reduce.ts";
  * {@link reduce} with the first element as the initial value.
  */
 export default function fold<T>(
-  f: (acc: T, x: T, i: number) => T
+  f: (acc: T, x: T, i: number) => T,
 ): (iter: Iterable<T>) => T;
 export default function fold<T>(
   f: (acc: T, x: T, i: number) => T,
-  iter: Iterable<T>
+  iter: Iterable<T>,
 ): T;
 export default function fold<T>(
   f: (acc: T, x: T, i: number) => T,
-  iter?: Iterable<T>
+  iter?: Iterable<T>,
 ): T | ((iter: Iterable<T>) => T) {
   if (iter === undefined) return (iter: Iterable<T>) => fold(f, iter);
   if (Array.isArray(iter)) return reduce(f, iter[0], iter.slice(1));

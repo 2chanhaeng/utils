@@ -9,7 +9,7 @@ import enumerate from "./enumerate.ts";
  * Takes elements from the iterable while the predicate is true.
  */
 export default function takeWhile<T>(
-  f: Predicate<T> | PredicateLike<T>
+  f: Predicate<T> | PredicateLike<T>,
 ): (iter: Iterable<T>) => Generator<T> {
   return function* (iter: Iterable<T>): Generator<T> {
     yield* takeWhileGen(f, enumerate(iter));
@@ -18,7 +18,7 @@ export default function takeWhile<T>(
 
 function* takeWhileGen<T>(
   f: Predicate<T> | PredicateLike<T>,
-  iter: IteratorObject<[T, number]>
+  iter: IteratorObject<[T, number]>,
 ): Generator<T> {
   const curr = iter.next();
   if (curr.done || !f(...curr.value)) return;

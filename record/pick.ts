@@ -8,17 +8,17 @@ import { isObject } from "pred";
  * Throws a TypeError if the input is not an object.
  */
 export default function pick<Key extends PropertyKey>(
-  keys: Key[]
+  keys: Key[],
 ): <T extends { [K in Key]: Pick<T, Key>[K] }>(
-  obj: T
+  obj: T,
 ) => { [K in Key]: Pick<T, Key>[K] } {
   return <T extends { [K in Key]: Pick<T, Key>[K] }>(
-    obj: T
+    obj: T,
   ): { [K in Key]: Pick<T, Key>[K] } => {
     if (!isObject(obj)) throw new TypeError("Expected an object");
     const keyset = new Set<PropertyKey>(keys);
     return Object.fromEntries(
-      Object.entries(obj).filter(([key]) => keyset.has(key))
+      Object.entries(obj).filter(([key]) => keyset.has(key)),
     ) as { [K in Key]: Pick<T, Key>[K] };
   };
 }

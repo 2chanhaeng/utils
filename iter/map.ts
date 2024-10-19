@@ -10,33 +10,34 @@ import { isIterable, isMappable } from "pred";
  */
 
 export default function map<T, S>(
-  f: Mapper<T, S>
+  f: Mapper<T, S>,
 ): (iter: Iterable<T>) => Generator<S>;
 export default function map<T, S>(
   f: Mapper<T, S>,
-  iter: Iterable<T>
+  iter: Iterable<T>,
 ): Generator<S>;
 export default function map<T, S>(
-  f: Mapper<T, S>
+  f: Mapper<T, S>,
 ): (iter: Mappable<T>) => Mappable<S>;
 export default function map<T, S>(
   f: Mapper<T, S>,
-  iter: Mappable<T>
+  iter: Mappable<T>,
 ): Mappable<S>;
 export default function map<T, S>(
   f: Mapper<T, S>,
-  iter: Iterable<T> | Mappable<T>
+  iter: Iterable<T> | Mappable<T>,
 ): Generator<S> | Mappable<S>;
 export default function map<T, S>(
   f: Mapper<T, S>,
-  iter?: Iterable<T> | Mappable<T>
+  iter?: Iterable<T> | Mappable<T>,
 ):
   | Generator<S>
   | ((iter: Iterable<T>) => Generator<S>)
   | Mappable<S>
   | ((iter: Mappable<T>) => Mappable<S>) {
-  if (iter === undefined)
+  if (iter === undefined) {
     return (iter: Iterable<T> | Mappable<T>) => map(f, iter);
+  }
   return isIterable(iter) ? mapGen(f, iter) : iter.map(f);
 }
 

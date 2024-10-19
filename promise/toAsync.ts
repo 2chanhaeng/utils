@@ -30,13 +30,13 @@ import { isIterable } from "pred";
  * console.log(result); // Output: ['h', 'e', 'l', 'l', 'o']
  */
 export default function toAsync<T>(
-  a: T
+  a: T,
 ): T extends Iterable<infer U> ? Promise<Awaited<U>[]> : Promise<Awaited<T>> {
-  if (isIterable<T extends Iterable<infer U> ? U : never>(a))
+  if (isIterable<T extends Iterable<infer U> ? U : never>(a)) {
     return Array.fromAsync(a) as T extends Iterable<infer U>
       ? Promise<Awaited<U>[]>
       : never;
-  return Promise.resolve(a) as T extends Iterable<infer _>
-    ? never
+  }
+  return Promise.resolve(a) as T extends Iterable<infer _> ? never
     : Promise<Awaited<T>>;
 }

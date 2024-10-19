@@ -15,7 +15,7 @@ Deno.test("apply", async () => {
   ].every((x) => x === 2);
   assertEquals(result, true);
   const notPromises = [apply(1, (x) => x + 1), apply(1)((x) => x + 1)].every(
-    (x) => x === 2
+    (x) => x === 2,
   );
   assertEquals(notPromises, true);
 

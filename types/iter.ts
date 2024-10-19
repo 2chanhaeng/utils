@@ -25,7 +25,7 @@ export type Predicate<T> = (x: T, i: number) => boolean;
  */
 export type PredicateLike<T> = (
   x: T,
-  i: number
+  i: number,
 ) => Exclude<unknown, (...x: unknown[]) => unknown>;
 /**
  * Container that can be filtered.
@@ -40,7 +40,7 @@ export type Filterable<T> =
 export type Reducer<T, U> = (
   previousValue: U,
   currentValue: T,
-  currentIndex: number
+  currentIndex: number,
 ) => U;
 /**
  * Container that can be reduced.
@@ -52,24 +52,19 @@ export type Reducible<T> =
 /**
  * Genric type to represent the types of the items in iterables.
  */
-export type ItersItems<T extends Iterable<unknown>[]> = T extends []
-  ? []
+export type ItersItems<T extends Iterable<unknown>[]> = T extends [] ? []
   : T extends [infer Head, ...infer Tail]
-  ? Head extends Iterable<infer Item>
-    ? Tail extends Iterable<unknown>[]
-      ? [Item, ...ItersItems<Tail>]
+    ? Head extends Iterable<infer Item>
+      ? Tail extends Iterable<unknown>[] ? [Item, ...ItersItems<Tail>]
       : [Item]
     : never
   : never;
 
-export type RecursiveFlat<T> = T extends string
-  ? string
-  : T extends Iterable<infer S>
-  ? RecursiveFlat<S>
+export type RecursiveFlat<T> = T extends string ? string
+  : T extends Iterable<infer S> ? RecursiveFlat<S>
   : T;
 export type Item<T> = T extends Iterable<infer S> ? S : never;
 export type ItemsItem<T> = T extends Iterable<infer S>
-  ? S extends Iterable<infer U>
-    ? U[]
-    : S
+  ? S extends Iterable<infer U> ? U[]
+  : S
   : never;

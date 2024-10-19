@@ -1,3 +1,4 @@
+// deno-lint-ignore no-unused-vars
 import type chain from "./chain.ts";
 import type { ItemsItem, RecursiveFlat } from "types";
 import type { Inferior, Inferiors } from "types/number.ts";
@@ -19,7 +20,11 @@ import { isChar, isIterable } from "pred";
  * const flatGenerator = flat(1)(nestedArrays);
  * console.log([...flatGenerator]); // Output: [1, 2, 3, [4, 5]]
  */
-export default function flat<N extends number>(depth: N = Infinity as N) {
+export default function flat<N extends number>(
+  depth: N = Infinity as N,
+): <T extends Iterable<unknown>>(
+  iters: T,
+) => Generator<FlatArrayOrRecursion<T, N>> {
   return function* <T extends Iterable<unknown>>(
     iters: T,
   ): Generator<FlatArrayOrRecursion<T, N>> {
