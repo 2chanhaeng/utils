@@ -20,8 +20,9 @@ Deno.test("always", () => {
 });
 
 Deno.test("identity", () => {
-  const one = 1;
+  const one = [1];
   assertEquals(one, identity(one));
+  assertStrictEquals(one, identity(one));
 });
 
 Deno.test("tryCopy", () => {
@@ -33,4 +34,5 @@ Deno.test("tryCopy", () => {
   assertNotEquals(cloned, tryCopy(arr));
   const iter = arr.values();
   const clonedIter = tryCopy(iter);
+  assertStrictEquals(iter, clonedIter);
 });
