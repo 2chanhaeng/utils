@@ -105,10 +105,10 @@ Deno.test("filter", () => {
 Deno.test("flat", () => {
   const items1 = [1, 2, 3];
   const items2 = "abc";
-  const flatten = Array.from(flat(items1, items2));
+  const flatten = Array.from(flat([items1, items2]));
   assertEquals(flatten, [1, 2, 3, "a", "b", "c"]);
   const items3 = Iterator.from([true, false]);
-  const flatten2 = Array.from(flat(items1, items2, items3));
+  const flatten2 = Array.from(flat([items1, items2, items3]));
   assertEquals(flatten2, [1, 2, 3, "a", "b", "c", true, false]);
 });
 
