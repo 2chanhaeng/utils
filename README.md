@@ -25,28 +25,23 @@ bunx jsr add @chomu/utils
 ## Usage
 
 ```ts
-import { filter, flat, get, map, pipe, split, tap, toArray } from "utils";
+import {chain, filter, get, map, pipe, split, tap, tapLen, tapLog, toArray} from "utils";
 
-const getUsers = pipe(
+const users = pipe(
   Deno.readDirSync,
-  filter((file: Deno.DirEntry) => file.name.search(/users.*\.jsonl/)),
+  filter((file: Deno.DirEntry) => file.name.search(/users.*\.jsonl/) >= 0),
   map(
     pipe(
       get("name")<string>,
+      tapLog("files"),
       (name) => `./${name}`,
       Deno.readTextFileSync,
       split("\n"),
     ),
   ),
-  flat,
+  chain,
+  tapLen(console.log),
   toArray,
-);
-const logLength = pipe(
-  get("length")<unknown[]>,
-  tap(console.log),
-);
-pipe(
-  getUsers,
-  logLength,
 )("./");
+
 ```
