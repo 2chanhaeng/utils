@@ -1,7 +1,6 @@
 // deno-lint-ignore no-unused-vars
 import type chain from "./chain.ts";
-import type { ItemsItem, RecursiveFlat } from "types";
-import type { Inferior, Inferiors } from "types/number.ts";
+import type { Inferior, Inferiors, ItemsItem, RecursiveFlat } from "types";
 import { isChar, isIterable } from "pred";
 
 /**

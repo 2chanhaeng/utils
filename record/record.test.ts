@@ -2,7 +2,7 @@ import { assertEquals } from "@std/assert";
 import { bind, bindTo, get, merge, pick } from "./mod.ts";
 import pipe from "pipe";
 import { tryCopy } from "atom";
-import { toAsync } from "promise/mod.ts";
+import { toAsync } from "promise";
 
 Deno.test("bind", async () => {
   const obj = { foo: "bar" } as const;

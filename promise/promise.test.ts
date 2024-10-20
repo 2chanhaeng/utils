@@ -1,7 +1,7 @@
 import { assertEquals } from "@std/assert";
 import { asyncBatches, delay, toAsync } from "./mod.ts";
-import { map } from "iter/mod.ts";
-import pipe from "pipe/mod.ts";
+import { map } from "iter";
+import pipe from "pipe";
 
 Deno.test("asyncBatches", async () => {
   const sec = () => new Date().getSeconds();
