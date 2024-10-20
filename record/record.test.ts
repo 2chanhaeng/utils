@@ -1,22 +1,41 @@
 import { assertEquals } from "@std/assert";
 import { bind, bindTo, get, merge, pick } from "./mod.ts";
 import pipe from "pipe";
+import { tryCopy } from "atom";
+import { toAsync } from "promise/mod.ts";
 
-Deno.test("bind", () => {
+Deno.test("bind", async () => {
   const obj = { foo: "bar" } as const;
   const bound = pipe(
-    () => obj,
+    tryCopy<typeof obj>,
     bind("bar", ({ foo }) => foo.length),
-  )();
+  )(obj);
   assertEquals(bound, { foo: "bar", bar: 3 });
+  const inputPromise = await pipe(
+    tryCopy<typeof obj>,
+    toAsync,
+    bind("bar", ({ foo }) => foo.length),
+  )(obj);
+  assertEquals(inputPromise, { foo: "bar", bar: 3 });
+  const callbackPromise = await pipe(
+    tryCopy<typeof obj>,
+    bind("bar", ({ foo }) => toAsync(foo.length)),
+  )(obj);
+  assertEquals(callbackPromise, { foo: "bar", bar: 3 });
+  const bothPromise = await pipe(
+    tryCopy<typeof obj>,
+    toAsync,
+    bind("bar", ({ foo }) => toAsync(foo.length)),
+  )(obj);
+  assertEquals(bothPromise, { foo: "bar", bar: 3 });
 });
 
-Deno.test("bindTo", () => {
+Deno.test("bindTo", async () => {
   const value = "bar" as const;
   const bound = bindTo("foo")(value);
   assertEquals(bound, { foo: "bar" });
-  const bound2 = bindTo("baz")(bound);
-  assertEquals(bound2, { baz: { foo: "bar" } });
+  const promiseBound = await bindTo("baz")(toAsync(bound));
+  assertEquals(promiseBound, { baz: { foo: "bar" } });
 });
 
 Deno.test("get", () => {
