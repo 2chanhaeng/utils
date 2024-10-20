@@ -28,7 +28,7 @@ import splitDate from "./splitDate.ts";
  * const format = formatDate("yy/m/d H:M:S");
  * console.log(format(new Date())); // Outputs: "24/4/9 8:5:7"
  */
-export default function formatDate(string: string) {
+export default function formatDate(string: string): (date: Date) => string {
   return (date: Date) => {
     const [year, month, day, hour, minute, second] = splitDate(date).map(
       (num) => num.toString(),

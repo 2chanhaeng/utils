@@ -25,7 +25,18 @@ bunx jsr add @chomu/utils
 ## Usage
 
 ```ts
-import {chain, filter, get, map, pipe, split, tap, tapLen, tapLog, toArray} from "utils";
+import {
+  chain,
+  filter,
+  get,
+  map,
+  pipe,
+  split,
+  tap,
+  tapLen,
+  tapLog,
+  toArray,
+} from "utils";
 
 const users = pipe(
   Deno.readDirSync,
@@ -43,5 +54,4 @@ const users = pipe(
   tapLen(console.log),
   toArray,
 )("./");
-
 ```
