@@ -1,5 +1,14 @@
 import { assertEquals } from "@std/assert";
-import { execute, forEach, tap, tapAsync, tapLen, tapLog } from "./mod.ts";
+import {
+  execute,
+  forEach,
+  forEachAsync,
+  tap,
+  tapAsync,
+  tapLen,
+  tapLog,
+} from "./mod.ts";
+import { delay } from "promise";
 
 Deno.test("execute", () => {
   const const1 = () => 1;
@@ -11,6 +20,24 @@ Deno.test("forEach", () => {
   const push = forEach((x: number) => arr.push(x));
   push([1, 2, 3]);
   assertEquals(arr, [1, 2, 3]);
+});
+
+Deno.test("forEachAsync", async () => {
+  const arr: number[] = [];
+  const sec = () => new Date().getSeconds();
+
+  // An async function that logs the current second after a delay.
+  const secWithDelay = async (_: unknown) => {
+    await delay(1000); // 1-second delay
+    arr.push(sec());
+  };
+
+  arr.push(sec());
+  await forEachAsync(secWithDelay)([1, 2, 3, 4, 5]);
+  const result = arr.map((x, i) => (60 + x - i) % 60).reduce((a, b) =>
+    a === b ? a : -1
+  );
+  assertEquals(result, arr[0]);
 });
 
 Deno.test("tap", () => {
