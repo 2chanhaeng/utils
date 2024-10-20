@@ -1,4 +1,4 @@
-import isPromise from "pred/isPromise.ts";
+import { isPromise } from "pred";
 
 /**
  * ```haskell

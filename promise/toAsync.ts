@@ -1,4 +1,4 @@
-import { isAsyncIterable, isIterable, isObject } from "pred";
+import { isAsyncIterable, isIterable } from "pred";
 
 /**
  * ```haskell
