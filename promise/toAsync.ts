@@ -1,4 +1,4 @@
-import { isIterable } from "pred";
+import { isAsyncIterable, isIterable, isObject } from "pred";
 
 /**
  * ```haskell
@@ -31,12 +31,20 @@ import { isIterable } from "pred";
  */
 export default function toAsync<T>(
   a: T,
-): T extends Iterable<infer U> ? Promise<Awaited<U>[]> : Promise<Awaited<T>> {
+): T extends Iterable<infer U> ? Promise<Awaited<U>[]>
+  : T extends AsyncIterable<infer U> ? Promise<Awaited<U>[]>
+  : Promise<Awaited<T>> {
   if (isIterable<T extends Iterable<infer U> ? U : never>(a)) {
     return Array.fromAsync(a) as T extends Iterable<infer U>
       ? Promise<Awaited<U>[]>
       : never;
+  } else if (isAsyncIterable<T extends AsyncIterable<infer U> ? U : never>(a)) {
+    return Array.fromAsync(a) as T extends Iterable<infer _> ? never
+      : T extends AsyncIterable<infer U> ? Promise<Awaited<U>[]>
+      : never;
+  } else {
+    return Promise.resolve(a) as T extends Iterable<infer _> ? never
+      : T extends AsyncIterable<infer _> ? never
+      : Promise<Awaited<T>>;
   }
-  return Promise.resolve(a) as T extends Iterable<infer _> ? never
-    : Promise<Awaited<T>>;
 }

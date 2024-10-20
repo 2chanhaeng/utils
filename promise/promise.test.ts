@@ -52,4 +52,11 @@ Deno.test("toAsync", async () => {
     toAsync,
   )(promisesArray);
   assertEquals(resultWithPipe, [[1], [2]]);
+  async function* asyncGen() {
+    yield await Promise.resolve(1 as const);
+    yield await Promise.resolve(2 as const);
+    yield await Promise.resolve(3 as const);
+  }
+  const resultAsyncGen = await toAsync(asyncGen());
+  assertEquals(resultAsyncGen, [1, 2, 3]);
 });
