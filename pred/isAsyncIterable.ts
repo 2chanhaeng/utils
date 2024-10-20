@@ -1,4 +1,4 @@
-import isIterable from "pred/isIterable.ts";
+import { isObject } from "pred";
 
 /**
  * Checks if the given value is an AsyncIterable.
@@ -11,5 +11,5 @@ import isIterable from "pred/isIterable.ts";
  * @returns `true` if the value is an AsyncIterable, otherwise `false`.
  */
 export default function isAsyncIterable<T>(x: unknown): x is AsyncIterable<T> {
-  return isIterable(x) && Symbol.asyncIterator in x;
+  return isObject(x) && Symbol.asyncIterator in x;
 }
