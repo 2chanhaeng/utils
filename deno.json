@@ -4,7 +4,8 @@
   "exports": "./mod.ts",
   "license": "MIT",
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "dev": "deno run --watch main.ts",
+    "cov": "deno test --allow-all --coverage=cov/ && deno coverage --lcov cov/ > cov.lcov && rm -rf cov"
   },
   "imports": {
     "/": "./",
