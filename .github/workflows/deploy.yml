@@ -3,7 +3,7 @@ name: Deploy to JSR
 on:
   push:
     branches:
-      - main
+      - deploy
 
 jobs:
   deploy:
@@ -15,17 +15,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Check if version has changed
-        id: version_check
-        run: |
-          git fetch origin main
-          previous_version=$(git show origin/main:deno.json | jq -r '.version')
-          echo "previous_version=$previous_version" >> $GITHUB_ENV
-          if [ "$current_version" == "$previous_version" ]; then
-            echo "Version has not changed. Exiting."
-            exit 0
-          fi
 
       - name: Set up Deno
         uses: denoland/setup-deno@v2
@@ -46,6 +35,5 @@ jobs:
           echo "current_version=$current_version" >> $GITHUB_ENV
 
       - name: Deploy to JSR
-        if: steps.version_check.outputs.previous_version != steps.get_version.outputs.current_version
         run: |
           deno publish
