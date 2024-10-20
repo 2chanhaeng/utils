@@ -1,4 +1,4 @@
-import { assertEquals } from "@std/assert";
+import { assertEquals, assertThrows } from "@std/assert";
 import {
   accumulate,
   append,
@@ -17,6 +17,7 @@ import {
   reduce,
   take,
   takeWhile,
+  toIter,
   zip,
 } from "./mod.ts";
 import { toArray } from "array";
@@ -186,6 +187,42 @@ Deno.test("takeWhile", () => {
   assertEquals(result, [1, 2, 3]);
   const empty = Array.from(takeWhile((x: number) => x < 0)(items));
   assertEquals(empty, []);
+});
+
+Deno.test("toIter", () => {
+  const array = [1, 2, 3];
+  const iter = toIter(array);
+  assertEquals(Array.from(iter), array);
+
+  const set = new Set([1, 2, 3]);
+  const iterSet = toIter(set);
+  assertEquals(Array.from(iterSet), Array.from(set));
+
+  const map = new Map([
+    ["a", 1],
+    ["b", 2],
+    ["c", 3],
+  ]);
+  const iterMap = toIter(map);
+  assertEquals(Array.from(iterMap), Array.from(map));
+
+  const string = "abc";
+  const iterString = toIter(string);
+  assertEquals(Array.from(iterString), Array.from(string));
+
+  const generator = function* () {
+    yield 1;
+    yield 2;
+    yield 3;
+  };
+  const iterGenerator = toIter(generator());
+  assertEquals(Array.from(iterGenerator), [1, 2, 3]);
+  const asyncGenerator = async function* () {
+    yield 1;
+    yield 2;
+    yield 3;
+  };
+  assertThrows(() => toIter(asyncGenerator() as unknown));
 });
 
 Deno.test("zip", () => {
