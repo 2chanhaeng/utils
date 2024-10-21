@@ -15,6 +15,6 @@ export default function tapLen<T>(
       yield i;
       len++;
     }
-    return f(len);
+    f(len);
   };
 }
