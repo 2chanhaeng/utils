@@ -2,6 +2,8 @@ import { reduce } from "iter";
 import apply from "apply";
 
 /**
+ * @module pipe
+ *
  * ```haskell
  * pipe::(a -> b) -> (b -> c) -> ... -> (y -> z) -> a -> z
  * ```

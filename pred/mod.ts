@@ -1,3 +1,11 @@
+/**
+ * @module pred
+ *
+ * Utilities for working with predicates.
+ *
+ * @example
+ * isMappable(a) && a.map(f); // No type error
+ */
 export { default as isAsyncIterable } from "./isAsyncIterable.ts";
 export { default as isChar } from "./isChar.ts";
 export { default as isFilterable } from "./isFilterable.ts";

@@ -1,3 +1,12 @@
+/**
+ * @module iter
+ *
+ * Utilities for working with iterables.
+ *
+ * @example
+ * import { map, range, reduce } from "./mod.ts";
+ * reduce((a, b) => a + b, 0)(map((x) => x * x)(range(1, 5))); // Returns: 30
+ */
 export { default as accumulate } from "./accumulate.ts";
 export { default as append } from "./append.ts";
 export { default as batch } from "./batch.ts";

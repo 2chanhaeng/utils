@@ -1,3 +1,10 @@
+/**
+ * @module io
+ * Utilities for working with side effects.
+ *
+ * @example
+ * tapLog("five")(5); // Outputs: five 5
+ */
 export { default as execute } from "./execute.ts";
 export { default as forEach } from "./forEach.ts";
 export { default as forEachAsync } from "./forEachAsync.ts";

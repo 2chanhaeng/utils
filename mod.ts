@@ -1,3 +1,7 @@
+/**
+ * @module mod.ts
+ * A collection of utilities for working with data types and structures.
+ */
 export { default as apply } from "./apply/mod.ts";
 export * from "./array/mod.ts";
 export * from "./atom/mod.ts";
