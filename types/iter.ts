@@ -28,6 +28,10 @@ export type PredicateLike<T> = (
   i: number,
 ) => Exclude<unknown, (...x: unknown[]) => unknown>;
 /**
+ * Refine type A to type B.
+ */
+export type Refinement<A, B extends A> = (a: A, i: number) => a is B;
+/**
  * Container that can be filtered.
  */
 export type Filterable<T> =
