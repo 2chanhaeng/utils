@@ -39,9 +39,14 @@ Deno.test("bindTo", async () => {
 });
 
 Deno.test("get", () => {
-  const obj = { foo: "bar" as const };
+  const obj = { foo: "bar" as const, baz: "qux" as const };
   const foo = get("foo")(obj);
   assertEquals(foo, "bar");
+  pipe(
+    bindTo("foo")<"bar">,
+    get("foo"),
+    (foo) => assertEquals(foo, "bar"),
+  )("bar");
 });
 
 Deno.test("merge", () => {

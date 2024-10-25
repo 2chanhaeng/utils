@@ -6,6 +6,9 @@
  */
 export default function get<T extends PropertyKey>(
   key: T,
-): <S>(obj: { [K in T]: S }) => S {
-  return <S>(obj: { [K in T]: S }) => obj[key];
+): <S extends { [K in T]: S[T] }>(obj: S) => S[T];
+export default function get<T extends PropertyKey>(
+  key: T,
+): <S extends { [K in T]: S[T] }>(obj: S) => S[T] {
+  return <S extends { [K in T]: S[T] }>(obj: S) => obj[key];
 }
