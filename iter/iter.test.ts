@@ -112,6 +112,11 @@ Deno.test("filter", () => {
   const items = [1, 2, 3, 4, 5];
   const result = Array.from(filter((x: number) => x % 2 === 0)(items));
   assertEquals(result, [2, 4]);
+  const refinementItems = [{ foo: 1 }, { foo: 2, bar: 2 }, { bar: 2 }, {}];
+  const refinementResult = Array.from(
+    filter((x: object): x is { foo: number } => "foo" in x)(refinementItems),
+  );
+  assertEquals(refinementResult, [{ foo: 1 }, { foo: 2, bar: 2 }]);
 });
 
 Deno.test("flat", () => {
