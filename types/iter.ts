@@ -30,7 +30,10 @@ export type PredicateLike<T> = (
 /**
  * Refine type A to type B.
  */
-export type Refinement<A, B extends A> = (a: A, i: number) => a is B;
+export interface Refinement<A, B extends A> {
+  (a: A): a is B;
+  (a: A, i: number): a is B;
+}
 /**
  * Container that can be filtered.
  */
