@@ -82,21 +82,14 @@ Deno.test("tapLen", () => {
   assertEquals(lengths, [3]);
 });
 
-declare global {
-  interface Console {
-    defaultLog?: typeof console.log;
-  }
-}
-
 Deno.test("tapLog", () => {
-  console.defaultLog = console.log;
+  const defaultLog = console.log;
   const logs: unknown[] = [];
   console.log = (...x: unknown[]) => {
     logs.push(...x);
-    console.defaultLog!(...x);
+    defaultLog!(...x);
   };
   tapLog("tag")(1);
   assertEquals(logs, ["tag", 1]);
-  console.log = console.defaultLog;
-  delete console.defaultLog;
+  console.log = defaultLog;
 });
