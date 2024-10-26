@@ -43,7 +43,8 @@
       "record",
       "set",
       "str",
-      "types"
+      "types",
+      "README.md"
     ],
     "exclude": ["**/*.test.ts"]
   }
