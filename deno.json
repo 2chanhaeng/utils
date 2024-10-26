@@ -5,7 +5,7 @@
   "license": "MIT",
   "tasks": {
     "dev": "deno run --watch main.ts",
-    "cov": "deno test --allow-all --coverage=cov/ && deno coverage --lcov cov/ > cov.lcov && rm -rf cov"
+    "cov": "deno test --allow-all --coverage=cov/ && deno coverage --lcov cov/ > cov.lcov && rm -rf cov && genhtml -o html_cov cov.lcov && open html_cov/index.html"
   },
   "imports": {
     "/": "./",
