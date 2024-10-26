@@ -1,5 +1,5 @@
 import { assertEquals, assertRejects } from "@std/assert";
-import { asyncBatches, delay, lift, toAsync } from "./mod.ts";
+import { asyncBatches, bimap, delay, lift, toAsync } from "./mod.ts";
 import { map } from "iter";
 import pipe from "pipe";
 
@@ -22,6 +22,14 @@ Deno.test("asyncBatches", async () => {
     .map((x) => x.reduce((a, b) => (a === b ? a : NaN)))
     .map((x) => (x - start) % 60);
   assertEquals(results, [1, 2, 3]);
+});
+
+Deno.test("bimap", async () => {
+  const doubleOrZero = bimap((a: number) => a * 2, () => 0);
+  const resolved = await doubleOrZero(Promise.resolve(3));
+  assertEquals(resolved, 6);
+  const rejected = await doubleOrZero(Promise.reject("error"));
+  assertEquals(rejected, 0);
 });
 
 Deno.test("delay", async () => {
