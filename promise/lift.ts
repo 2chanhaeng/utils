@@ -1,4 +1,3 @@
-import { isPromise } from "pred";
 import type { Refinement } from "types";
 
 /**
@@ -57,14 +56,9 @@ export default function lift<T, S extends T>(
         Promise.resolve(a),
       ) as typeof filter extends Refinement<T, S> ? Promise<S> : Promise<T>;
   }
-  if (isPromise<T>(a)) {
-    return a.then((i) =>
-      filter(i)
-        ? (i as typeof filter extends Refinement<T, S> ? S : T)
-        : Promise.reject(i as T)
-    );
-  }
-  return filter(a as Awaited<T>)
-    ? Promise.resolve(a as typeof filter extends Refinement<T, S> ? S : T)
-    : Promise.reject(a as T);
+  return Promise.resolve(a).then((i) =>
+    filter(i)
+      ? (i as typeof filter extends Refinement<T, S> ? S : T)
+      : Promise.reject(i as T)
+  );
 }
