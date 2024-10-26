@@ -1,5 +1,5 @@
 import { assertEquals, assertRejects } from "@std/assert";
-import { asyncBatches, bimap, delay, lift, toAsync } from "./mod.ts";
+import { asyncBatches, bimap, delay, lift, liftMap, toAsync } from "./mod.ts";
 import { map } from "iter";
 import pipe from "pipe";
 
@@ -20,7 +20,7 @@ Deno.test("asyncBatches", async () => {
   const start = sec();
   const results = (await Array.fromAsync(asyncBatches(secWithDelay)(iters)))
     .map((x) => x.reduce((a, b) => (a === b ? a : NaN)))
-    .map((x) => (x - start) % 60);
+    .map((x) => (x - start + 60) % 60);
   assertEquals(results, [1, 2, 3]);
 });
 
@@ -50,6 +50,20 @@ Deno.test("lift", async () => {
   assertRejects(rejectedFromSync);
   const rejectedFromAsync = () => liftIsEven(Promise.resolve(5));
   assertRejects(rejectedFromAsync);
+});
+
+Deno.test("liftMap", async () => {
+  const isEven = (a: number) => a % 2 === 0;
+  const divideByTwo = (a: number) => a / 2;
+  const liftMapIsEven = liftMap(isEven, divideByTwo, () => 0);
+  const resolvedFromSync = await liftMapIsEven(2);
+  assertEquals(resolvedFromSync, 1);
+  const resolvedFromAsync = await liftMapIsEven(Promise.resolve(4));
+  assertEquals(resolvedFromAsync, 2);
+  const rejectedFromSync = await liftMapIsEven(3);
+  assertEquals(rejectedFromSync, 0);
+  const rejectedFromAsync = await liftMapIsEven(Promise.resolve(5));
+  assertEquals(rejectedFromAsync, 0);
 });
 
 Deno.test("toAsync", async () => {
