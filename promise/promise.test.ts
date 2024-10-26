@@ -1,5 +1,5 @@
-import { assertEquals } from "@std/assert";
-import { asyncBatches, delay, toAsync } from "./mod.ts";
+import { assertEquals, assertRejects } from "@std/assert";
+import { asyncBatches, delay, lift, toAsync } from "./mod.ts";
 import { map } from "iter";
 import pipe from "pipe";
 
@@ -29,6 +29,19 @@ Deno.test("delay", async () => {
   await delay(100);
   const end = Date.now();
   assertEquals(end - start >= 100, true);
+});
+
+Deno.test("lift", async () => {
+  const isEven = (a: number) => a % 2 === 0;
+  const liftIsEven = lift(isEven);
+  const resolvedFromSync = await liftIsEven(2);
+  assertEquals(resolvedFromSync, 2);
+  const resolvedFromAsync = await liftIsEven(Promise.resolve(4));
+  assertEquals(resolvedFromAsync, 4);
+  const rejectedFromSync = () => liftIsEven(3);
+  assertRejects(rejectedFromSync);
+  const rejectedFromAsync = () => liftIsEven(Promise.resolve(5));
+  assertRejects(rejectedFromAsync);
 });
 
 Deno.test("toAsync", async () => {
