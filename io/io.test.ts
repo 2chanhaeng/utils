@@ -5,6 +5,7 @@ import {
   forEachAsync,
   tap,
   tapAsync,
+  tapError,
   tapLen,
   tapLog,
 } from "./mod.ts";
@@ -58,6 +59,18 @@ Deno.test("tapAsync", async () => {
   await pushPopped(arr);
   assertEquals(arr, [1, 2, 3]);
   assertEquals(side, [3]);
+});
+
+Deno.test("tapError", () => {
+  const defaultError = console.error;
+  const errors: unknown[] = [];
+  console.error = (...x: unknown[]) => {
+    errors.push(...x);
+    defaultError!(...x);
+  };
+  tapError("tag")(1);
+  assertEquals(errors, ["tag", 1]);
+  console.error = defaultError;
 });
 
 Deno.test("tapLen", () => {
