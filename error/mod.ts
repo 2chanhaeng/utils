@@ -7,3 +7,4 @@
  * raise("This is an error message"); // Throws: Error: This is an error message
  */
 export { default as raise } from "./raise.ts";
+export { default as tryCatch } from "./tryCatch.ts";
