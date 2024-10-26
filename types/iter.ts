@@ -7,13 +7,16 @@ export type Iterables<T> = T[] | IteratorObject<T> | ReadonlyArray<T>;
 /**
  * Function that maps a value to another value.
  */
-export type Mapper<T, S> = (x: T, i: number) => S;
+export interface Mapper<T, S> {
+  (x: T): S;
+  (x: T, i: number): S;
+}
 /**
  * Container that can be mapped over.
  */
-export type Mappable<T> =
-  | Iterables<T>
-  | { map: <U>(f: Mapper<T, U>) => Mappable<U> };
+export interface Mappable<T> {
+  map: <U>(f: Mapper<T, U>) => Mappable<U>;
+}
 
 /**
  * Function that returns a boolean value.

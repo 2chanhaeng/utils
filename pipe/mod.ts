@@ -46,7 +46,8 @@ import apply from "apply";
  * @param {...Function} fns - The functions to compose.
  * @returns {Function} A function that takes the initial arguments and returns the result of the composed functions.
  */
-function pipe(): <T0 extends unknown[]>(...x: T0) => T0; // To prevent error when start to write pipe()
+// deno-fmt-ignore
+function pipe(): <T0 extends unknown[]>(...x: T0) => T0 extends [] ? undefined : T0 extends [infer U] ? U : unknown[]; // To prevent error when start to write pipe()
 // deno-fmt-ignore
 function pipe<T0 extends unknown[], S>(f0: (...x: T0) => S, ): (...x: T0) => PipeReturn<[T0], S>;
 // deno-fmt-ignore
@@ -94,7 +95,15 @@ function pipe(
     | []
     | [(...x: unknown[]) => unknown, ...((x: unknown) => unknown)[]]
 ) {
-  if (f0 === undefined) return (...x: unknown[]) => x;
+  if (f0 === undefined) {
+    return (...x: unknown[]) =>
+      (x.length === 0
+        ? undefined
+        : x.length === 1
+        ? x[0]
+        : x) as typeof x extends [] ? undefined : typeof x extends [infer U] ? U
+        : unknown[];
+  }
   return (...x: Parameters<typeof f0>) =>
     reduce(apply, f0(...x), fns) as HasReturnPromise<
       Init<typeof fns>

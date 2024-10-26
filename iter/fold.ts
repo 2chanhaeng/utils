@@ -21,5 +21,6 @@ export default function fold<T>(
   if (iter === undefined) return (iter: Iterable<T>) => fold(f, iter);
   if (Array.isArray(iter)) return reduce(f, iter[0], iter.slice(1));
   if (isIterator(iter)) return reduce<T, T>(f, iter.next().value as T, iter);
-  return reduce(f, iter[Symbol.iterator]().next().value, iter);
+  const iterator = Iterator.from(iter);
+  return reduce(f, iterator.next().value!, iterator);
 }

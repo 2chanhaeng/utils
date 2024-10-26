@@ -19,4 +19,11 @@ Deno.test("pipe", async () => {
     (x: number) => x + 1,
   )(1, 2);
   assertEquals(multipleArgs, 4);
+  const empty = pipe();
+  const noInput = empty();
+  assertEquals(noInput, undefined);
+  const oneInput = empty(1);
+  assertEquals(oneInput, 1);
+  const multiInput = empty(1, 2);
+  assertEquals(multiInput, [1, 2]);
 });

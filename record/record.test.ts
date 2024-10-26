@@ -1,4 +1,4 @@
-import { assertEquals } from "@std/assert";
+import { assertEquals, assertThrows } from "@std/assert";
 import { bind, bindTo, get, merge, pick } from "./mod.ts";
 import pipe from "pipe";
 import { tryCopy } from "atom";
@@ -70,4 +70,6 @@ Deno.test("pick", () => {
   } as const;
   const picked = pick(["foo", "asd"])(obj);
   assertEquals(picked, { foo: "bar", asd: "fgh" });
+  const notObject = () => pick([])(1);
+  assertThrows(notObject);
 });

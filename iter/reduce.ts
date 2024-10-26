@@ -9,10 +9,10 @@ import { isIterator, isReducible } from "pred";
  */
 export default function reduce<T, S>(
   f: Reducer<T, S>,
-): (init: S) => (iter: Iterable<T>) => S;
-export default function reduce<T, S>(
-  f: Reducer<T, S>,
-): (init: S, iter: Iterable<T>) => S;
+): {
+  (init: S, iter: Iterable<T>): S;
+  (init: S): (iter: Iterable<T>) => S;
+};
 export default function reduce<T, S>(
   f: Reducer<T, S>,
   init: S,

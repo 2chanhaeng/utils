@@ -52,6 +52,10 @@ Deno.test("accumulate", () => {
     )(asyncItems),
   );
   asyncItemsResult.then((res) => assertEquals(res, [0, 1, 3, 6, 10, 15]));
+  const emptyResult = Array.from(
+    accumulate((acc: number, curr: number) => acc + curr)([]),
+  );
+  assertEquals(emptyResult, []);
 });
 
 Deno.test("append", () => {
@@ -85,7 +89,7 @@ Deno.test("drop", () => {
   const items = [1, 2, 3, 4, 5];
   const dropped = Array.from(drop(2)(items));
   assertEquals(dropped, [3, 4, 5]);
-  const empty = Array.from(drop(5)(items));
+  const empty = Array.from(drop(6)(items));
   assertEquals(empty, []);
 });
 
@@ -117,6 +121,8 @@ Deno.test("filter", () => {
     filter((x: object): x is { foo: number } => "foo" in x)(refinementItems),
   );
   assertEquals(refinementResult, [{ foo: 1 }, { foo: 2, bar: 2 }]);
+  const setResult = toArray(filter((x: number) => x % 2 === 0)(new Set(items)));
+  assertEquals(setResult, [2, 4]);
 });
 
 Deno.test("flat", () => {
@@ -134,12 +140,23 @@ Deno.test("fold", () => {
   const items = [1, 2, 3, 4, 5];
   const result = fold((acc: number, x: number) => acc + x)(items);
   assertEquals(result, 15);
+  const iteratorResult = fold((acc: number, x: number) => acc + x)(
+    Iterator.from(items),
+  );
+  assertEquals(iteratorResult, 15);
+  const setResult = fold((acc: number, x: number) => acc + x)(new Set(items));
+  assertEquals(setResult, 15);
 });
 
 Deno.test("map", () => {
   const items = [1, 2, 3, 4, 5];
-  const result = Array.from(map((x: number) => x * 2)(items));
-  assertEquals(result, [2, 4, 6, 8, 10]);
+  const mapDouble = map((x: number) => x * 2);
+  const mapFnResult = Array.from(mapDouble(items));
+  assertEquals(mapFnResult, [2, 4, 6, 8, 10]);
+  const mapFnItemsResult = Array.from(map((x: number) => x * 2, items));
+  assertEquals(mapFnItemsResult, [2, 4, 6, 8, 10]);
+  const setResult = toArray(map((x: number) => x * 2)(new Set(items)));
+  assertEquals(setResult, [2, 4, 6, 8, 10]);
 });
 
 Deno.test("prepend", () => {
@@ -159,14 +176,41 @@ Deno.test("range", () => {
 
 Deno.test("reduce", () => {
   const items = [1, 2, 3, 4, 5];
-  const result = reduce((acc: number, x: number) => acc + x, 10)(items);
-  assertEquals(result, 25);
-  const stringResult = reduce((acc: string, x: number) => acc + x, "")(items);
+  const genIters = () => [items.slice(), Iterator.from(items), new Set(items)];
+  const reduceFn = reduce((acc: number, x: number) => acc + x);
+  const reduceFnWithoutIterResult = genIters().map(reduceFn(10));
+  assertEquals(reduceFnWithoutIterResult, [25, 25, 25]);
+  const reduceFnWithIterResult = genIters().map((i) => reduceFn(10, i));
+  assertEquals(reduceFnWithIterResult, [25, 25, 25]);
+  const reduceFnInit = reduce((acc: number, x: number) => acc + x, 10);
+  const reduceFnInitResult = genIters().map(reduceFnInit);
+  assertEquals(reduceFnInitResult, [25, 25, 25]);
+  const reduceFnInitItemsResult = genIters().map((iters) =>
+    reduce((acc: number, x: number) => acc + x, 10, iters)
+  );
+  assertEquals(reduceFnInitItemsResult, [25, 25, 25]);
+  const reducible = {
+    [Symbol.iterator]: function* () {
+      yield* items;
+    },
+    reduce: (f: (acc: number, x: number) => number, init: number) => {
+      let acc = init;
+      for (const x of items) acc = f(acc, x);
+      return acc;
+    },
+  };
+  const reducibleResult = reduce(
+    (acc: number, x: number) => acc + x,
+    10,
+    reducible,
+  );
+  assertEquals(reducibleResult, 25);
+  const stringResult = reduce((acc: string, x: number) => acc + x)("")(items);
   assertEquals(stringResult, "12345");
   const initPromiseResult = reduce(
     async (a, b) => (await a) + b,
     Promise.resolve(0),
-    items,
+    Iterator.from(items),
   );
   initPromiseResult.then((res) => assertEquals(res, 15));
   const promiseItems = items.map((i) => Promise.resolve(i));
@@ -228,6 +272,8 @@ Deno.test("toIter", () => {
     yield 3;
   };
   assertThrows(() => toIter(asyncGenerator() as unknown));
+  const notIterResult = toIter(1);
+  assertEquals(Array.from(notIterResult), [1]);
 });
 
 Deno.test("zip", () => {
