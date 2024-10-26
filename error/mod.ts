@@ -8,3 +8,4 @@
  */
 export { default as raise } from "./raise.ts";
 export { default as tryCatch } from "./tryCatch.ts";
+export { default as tryElse } from "./tryElse.ts";
