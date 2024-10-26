@@ -25,6 +25,7 @@ jobs:
         run: |
           deno fmt --check
           deno lint
+          deno task cov
 
       - name: Get current version
         id: get_version
