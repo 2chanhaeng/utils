@@ -12,7 +12,13 @@ by [fp-ts](https://gcanti.github.io/fp-ts/) and [fxts](https://fxts.dev/).
 
 ## Installation
 
-Install from [JSR](https://jsr.io/@chomu/utils).
+Use from JSR with Deno.
+
+```ts
+import * as _chomu_utils from "jsr:@chomu/utils";
+```
+
+Or install from [JSR](https://jsr.io/@chomu/utils).
 
 ```bash
 deno add jsr:@chomu/utils
