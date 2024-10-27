@@ -1,5 +1,3 @@
-import type { Refinement } from "types";
-
 /**
  * ```haskell
  * liftMap::((a -> Bool), (a -> b), (unknown -> b)) -> Promise a -> Promise b
@@ -29,19 +27,20 @@ export default function liftMap<T, S>(
   onRejected: (b: unknown) => Promise<S> | S,
 ): (a: T | Promise<T>) => Promise<S>;
 export default function liftMap<T, S, U extends T>(
-  filter: Refinement<T, U>,
+  filter: (a: T) => a is U,
   onResolved: (a: U) => Promise<S> | S,
   onRejected: (b: unknown) => Promise<S> | S,
 ): (a: T | Promise<T>) => Promise<S>;
 export default function liftMap<T, S, U extends T>(
-  filter: Refinement<T, U> | ((a: T) => boolean),
-  onResolved: typeof filter extends Refinement<T, U> ? (a: U) => Promise<S> | S
+  filter: ((a: T) => a is U) | ((a: T) => boolean),
+  onResolved: typeof filter extends ((a: T) => a is U)
+    ? (a: U) => Promise<S> | S
     : (a: T) => Promise<S> | S,
   onRejected: (b: unknown) => Promise<S> | S,
 ): (a: T | Promise<T>) => Promise<S> {
   return (a: T | Promise<T>): Promise<S> =>
     Promise.resolve(a)
-      .then((i) => filter(i) ? i : Promise.reject(i)).then(onResolved).catch(
-        onRejected,
-      );
+      .then((i) => filter(i) ? i : Promise.reject(i))
+      .then(onResolved)
+      .catch(onRejected);
 }
