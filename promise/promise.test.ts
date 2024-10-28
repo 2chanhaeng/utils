@@ -1,5 +1,13 @@
 import { assertEquals, assertRejects } from "@std/assert";
-import { asyncBatches, bimap, delay, lift, liftMap, toAsync } from "./mod.ts";
+import {
+  asyncBatches,
+  bimap,
+  delay,
+  guarantee,
+  lift,
+  liftMap,
+  toAsync,
+} from "./mod.ts";
 import { map } from "iter";
 import pipe from "pipe";
 
@@ -37,6 +45,15 @@ Deno.test("delay", async () => {
   await delay(100);
   const end = Date.now();
   assertEquals(end - start >= 100, true);
+});
+
+Deno.test("guarantee", async () => {
+  let numOrNull: number | null = 1;
+  const resolved = await guarantee(numOrNull);
+  assertEquals(resolved, 1);
+  numOrNull = null;
+  const rejected = () => guarantee(numOrNull);
+  assertRejects(rejected);
 });
 
 Deno.test("lift", async () => {
