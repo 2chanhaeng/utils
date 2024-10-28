@@ -1,5 +1,5 @@
 import { assertEquals, assertThrows } from "@std/assert";
-import { bind, bindTo, get, merge, pick } from "./mod.ts";
+import { bind, bindTo, get, merge, method, pick } from "./mod.ts";
 import pipe from "pipe";
 import { tryCopy } from "atom";
 import { toAsync } from "promise";
@@ -58,6 +58,16 @@ Deno.test("merge", () => {
   const obj4 = { zxc: "vbn", asd: "jkl" } as const;
   const merged2 = merge(obj3)(obj4);
   assertEquals(merged2, { qwe: "rty", asd: "jkl", zxc: "vbn" });
+});
+
+Deno.test("method", () => {
+  const obj = {
+    foo: "bar",
+    baz: "qux",
+    method: (a: number, b: number) => a + b,
+  } as const;
+  const result = method("method", 1, 2)(obj);
+  assertEquals(result, 3);
 });
 
 Deno.test("pick", () => {
