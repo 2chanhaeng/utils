@@ -1,5 +1,14 @@
 import { assertEquals, assertThrows } from "@std/assert";
-import { bind, bindTo, get, merge, method, omit, pick } from "./mod.ts";
+import {
+  bind,
+  bindTo,
+  get,
+  merge,
+  method,
+  omit,
+  pick,
+  separate,
+} from "./mod.ts";
 import pipe from "pipe";
 import { tryCopy } from "atom";
 import { toAsync } from "promise";
@@ -94,4 +103,11 @@ Deno.test("pick", () => {
   assertEquals(picked, { foo: "bar", asd: "fgh" });
   const notObject = () => pick([])(1);
   assertThrows(notObject);
+});
+
+Deno.test("separate", () => {
+  const obj = { a: 1, b: 2, c: 3 } as const;
+  const [picked, omitted] = separate(["a", "c"])(obj);
+  assertEquals(picked, { a: 1, c: 3 });
+  assertEquals(omitted, { b: 2 });
 });
