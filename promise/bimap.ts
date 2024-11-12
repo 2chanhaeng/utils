@@ -14,9 +14,9 @@
  * console.log(await doubleOrZero(Promise.resolve(3))); // Logs: 6
  * console.log(await doubleOrZero(Promise.reject("error"))); // Logs: 0
  */
-export default function bimap<T, S>(
+export default function bimap<T, S, U>(
   onResolved: (a: T) => Promise<S> | S,
-  onRejected: (b: unknown) => Promise<S> | S,
+  onRejected: (b: U) => Promise<S> | S,
 ): (a: T | Promise<T>) => Promise<S> {
   return (a: T | Promise<T>): Promise<S> =>
     Promise.resolve(a).then(onResolved).catch(onRejected);

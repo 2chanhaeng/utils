@@ -1,5 +1,5 @@
 import type { Predicate, PredicateLike, Refinement } from "types";
-import isFilterable from "../pred/isFilterable.ts";
+import { isFilterable } from "pred";
 import enumerate from "./enumerate.ts";
 
 /**
