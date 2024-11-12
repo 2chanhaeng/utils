@@ -1,3 +1,5 @@
+import type { Predicate } from "./pred.ts";
+
 /**
  * Iterable types with helper methods(e.g. map, filter, ...).
  * Array and IteratorObject(Iterator in JS).
@@ -18,25 +20,6 @@ export interface Mappable<T> {
   map: <U>(f: Mapper<T, U>) => Mappable<U>;
 }
 
-/**
- * Function that returns a boolean value.
- */
-export type Predicate<T> = (x: T, i: number) => boolean;
-/**
- * Function that returns any value except functions.
- * Exclude functions that return a function to prevent mistakes.
- */
-export type PredicateLike<T> = (
-  x: T,
-  i: number,
-) => Exclude<unknown, (...x: unknown[]) => unknown>;
-/**
- * Refine type A to type B.
- */
-export interface Refinement<A, B extends A> {
-  (a: A): a is B;
-  (a: A, i: number): a is B;
-}
 /**
  * Container that can be filtered.
  */
