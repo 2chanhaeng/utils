@@ -1,5 +1,6 @@
 import { assertEquals } from "@std/assert";
 import {
+  defer,
   execute,
   forEach,
   forEachAsync,
@@ -10,6 +11,19 @@ import {
   tapLog,
 } from "./mod.ts";
 import { delay } from "promise";
+
+Deno.test("defer", () => {
+  const arr: (number | string)[] = [];
+  const push = defer((x: number) => arr.push(x));
+  const pushWithString = defer((x: number, y: string) => arr.push(`${x}${y}`));
+  const push4 = defer((x: number) => arr.push(x), 4);
+  push(1)();
+  assertEquals(arr, [1]);
+  pushWithString(2, "3")();
+  assertEquals(arr, [1, "23"]);
+  push4();
+  assertEquals(arr, [1, "23", 4]);
+});
 
 Deno.test("execute", () => {
   const const1 = () => 1;
