@@ -10,6 +10,7 @@ import {
 } from "./mod.ts";
 import { map } from "iter";
 import pipe from "pipe";
+import type { Refinement } from "types";
 
 Deno.test("asyncBatches", async () => {
   const sec = () => new Date().getSeconds();
@@ -81,6 +82,49 @@ Deno.test("liftMap", async () => {
   assertEquals(rejectedFromSync, 0);
   const rejectedFromAsync = await liftMapIsEven(Promise.resolve(5));
   assertEquals(rejectedFromAsync, 0);
+
+  const asyncIsEven = (a: number) => Promise.resolve(a % 2 === 0);
+  const asyncDivideByTwo = (a: number) => Promise.resolve(a / 2);
+  const liftMapAsyncIsEven = liftMap(
+    asyncIsEven,
+    asyncDivideByTwo,
+    () => Promise.resolve(0),
+  );
+  const resolvedFromSyncAsync = await liftMapAsyncIsEven(2);
+  assertEquals(resolvedFromSyncAsync, 1);
+  const resolvedFromAsyncAsync = await liftMapAsyncIsEven(Promise.resolve(4));
+  assertEquals(resolvedFromAsyncAsync, 2);
+  const rejectedFromSyncAsync = await liftMapAsyncIsEven(3);
+  assertEquals(rejectedFromSyncAsync, 0);
+  const rejectedFromAsyncAsync = await liftMapAsyncIsEven(Promise.resolve(5));
+  assertEquals(rejectedFromAsyncAsync, 0);
+
+  interface Number {
+    value: number;
+  }
+  interface Even {
+    type: "even";
+    value: number;
+  }
+  const asyncIsEvenType = (
+    a: Number,
+  ): Promise<ReturnType<Refinement<Number, Even>>> =>
+    Promise.resolve(a.value % 2 === 0);
+  const liftMapAsyncIsEvenType = liftMap<Number, Number, Even>(
+    asyncIsEvenType,
+    (a) => Promise.resolve({ value: a.value / 2 }),
+    () => Promise.resolve({ value: 0 }),
+  );
+
+  const resolvedAsyncLift = await liftMapAsyncIsEvenType(Promise.resolve({
+    type: "even",
+    value: 2,
+  }));
+  assertEquals(resolvedAsyncLift, { value: 1 });
+  const rejectedAsyncLift = await liftMapAsyncIsEvenType(Promise.resolve({
+    value: 3,
+  }));
+  assertEquals(rejectedAsyncLift, { value: 0 });
 });
 
 Deno.test("toAsync", async () => {
