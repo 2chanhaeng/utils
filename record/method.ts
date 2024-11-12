@@ -26,7 +26,14 @@
 export default function method<K extends PropertyKey, Arg, Args extends Arg[]>(
   key: K,
   ...args: Args
-) {
+): <
+  Return,
+  T extends {
+    [key in K]: (
+      ...args: Args
+    ) => Return;
+  },
+>(record: T) => Return {
   return <
     Return,
     T extends {
