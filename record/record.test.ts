@@ -7,6 +7,7 @@ import {
   method,
   omit,
   pick,
+  pluck,
   separate,
 } from "./mod.ts";
 import pipe from "pipe";
@@ -102,6 +103,16 @@ Deno.test("pick", () => {
   const picked = pick(["foo", "asd"])(obj);
   assertEquals(picked, { foo: "bar", asd: "fgh" });
   const notObject = () => pick([])(1);
+  assertThrows(notObject);
+});
+
+Deno.test("pluck", () => {
+  const obj = { a: 1, b: 2, c: 3 } as const;
+  const plucked = pluck(["a", "c", "d"])(obj);
+  assertEquals(plucked, { a: 1, c: 3, d: undefined });
+  const pluckedWithDefaultValue = pluck(["a", "c", "d"], 4 as const)(obj);
+  assertEquals(pluckedWithDefaultValue, { a: 1, c: 3, d: 4 });
+  const notObject = () => pluck([])(1);
   assertThrows(notObject);
 });
 

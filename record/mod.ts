@@ -13,4 +13,5 @@ export { default as merge } from "./merge.ts";
 export { default as method } from "./method.ts";
 export { default as omit } from "./omit.ts";
 export { default as pick } from "./pick.ts";
+export { default as pluck } from "./pluck.ts";
 export { default as separate } from "./separate.ts";
