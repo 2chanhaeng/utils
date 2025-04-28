@@ -8,14 +8,6 @@ export default function drop(
   n: number,
 ): <T>(iter: Iterable<T>) => Generator<T> {
   return function* <T>(iter: Iterable<T>): Generator<T> {
-    yield* dropper(Iterator.from(iter))(n);
-  };
-}
-
-function dropper<T>(iter: IteratorObject<T>): (n: number) => Generator<T> {
-  return function* dropInner(n: number): Generator<T> {
-    if (n <= 0) yield* iter;
-    else if (iter.next().done) return;
-    else yield* dropInner(n - 1);
+    yield* Iterator.from(iter).filter((_, i) => i >= n);
   };
 }

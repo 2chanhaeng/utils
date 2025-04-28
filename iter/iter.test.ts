@@ -66,7 +66,7 @@ Deno.test("append", () => {
 
 Deno.test("batch", () => {
   const items = [1, 2, 3, 4, 5];
-  const batched = Array.from(map(toArray)(batch(2)(items)));
+  const batched = Array.from(batch(2)(items));
   assertEquals(batched, [[1, 2], [3, 4], [5]]);
 });
 
@@ -97,6 +97,10 @@ Deno.test("dropWhile", () => {
   const items = [1, 2, 3, 4, 5, 4, 3, 2, 1];
   const result = Array.from(dropWhile((x: number) => x < 4)(items));
   assertEquals(result, [4, 5, 4, 3, 2, 1]);
+  const resultWithIndex = Array.from(
+    dropWhile((x: number, i: number) => x + i < 4)(items),
+  );
+  assertEquals(resultWithIndex, [3, 4, 5, 4, 3, 2, 1]);
   const empty = Array.from(dropWhile((x: number) => x < 6)(items));
   assertEquals(empty, []);
 });

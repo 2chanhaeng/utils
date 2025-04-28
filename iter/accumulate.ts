@@ -44,7 +44,7 @@ function* accumulator<T, S>(
   iter: IteratorObject<[T, number]>,
 ): Generator<S> {
   yield prev;
-  const curr = iter.next();
-  if (curr.done) return;
-  yield* accumulator(f, f(prev, ...curr.value), iter);
+  for (const [curr, index] of iter) {
+    yield prev = f(prev, curr, index);
+  }
 }
