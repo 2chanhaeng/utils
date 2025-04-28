@@ -1,9 +1,13 @@
 /**
  * ```python
- * diff = lambda set1: lambda set2: set1 - set2
+ * set1 - set2 - set3 - ...
  * ```
- * Difference of first set with second set.
+ *
+ * Difference of sets.
  */
-export default function diff<T>(set1: Set<T>): <S>(set2: Set<S>) => Set<T | S> {
-  return <S>(set2: Set<S>) => set1.difference(set2);
+export default function diff<T>(
+  set1: Set<T>,
+): <S>(...sets: Set<S>[]) => Set<T | S> {
+  return <S>(...sets: Set<S>[]) =>
+    sets.reduce((acc, set2) => acc.difference(set2), set1);
 }

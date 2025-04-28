@@ -1,11 +1,14 @@
 /**
- * ```haskell
- * union::Set a -> Set b -> Set (a | b)
+ * ```python
+ * set1 | set2 | set3 | ...
  * ```
+ *
  * Unions two sets.
  */
 export default function union<T>(
   set1: Set<T>,
-): <S>(set2: Set<S>) => Set<T | S> {
-  return <S>(set2: Set<S>) => set1.union(set2);
+): <S>(...sets: Set<S>[]) => Set<T | S> {
+  return <S>(...sets: Set<S>[]) => {
+    return sets.reduce((acc, set) => acc.union(set), set1 as Set<T | S>);
+  };
 }
