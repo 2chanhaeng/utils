@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { diff, intersection, union } from "./mod.ts";
+import { diff, intersection, symDiff, union } from "./mod.ts";
 
 Deno.test("diff", () => {
   const set1 = new Set([1, 2, 3]);
@@ -19,6 +19,16 @@ Deno.test("intersection", () => {
   const set3 = new Set([2, 4, 8]);
   const intersected2 = intersection(set1)(set2, set3);
   assertEquals(intersected2, new Set([]));
+});
+
+Deno.test("symDiff", () => {
+  const set1 = new Set([1, 2, 3]);
+  const set2 = new Set([3, 4, 5]);
+  const symDiffed = symDiff(set1)(set2);
+  assertEquals(symDiffed, new Set([1, 2, 4, 5]));
+  const set3 = new Set([2, 4, 8]);
+  const symDiffed2 = symDiff(set1)(set2, set3);
+  assertEquals(symDiffed2, new Set([1, 5, 8]));
 });
 
 Deno.test("union", () => {

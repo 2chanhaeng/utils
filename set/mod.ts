@@ -8,4 +8,5 @@
  */
 export { default as diff } from "./diff.ts";
 export { default as intersection } from "./intersection.ts";
+export { default as symDiff } from "./symDiff.ts";
 export { default as union } from "./union.ts";
