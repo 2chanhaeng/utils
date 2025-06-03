@@ -12,11 +12,26 @@ Deno.test("slice", () => {
   assertEquals(slice(1, 3)(arr), [2, 3]);
 });
 
-Deno.test("toArray", () => {
-  const items = [1, 2, 3];
-  const gen = function* () {
+Deno.test("toArray", async () => {
+  const items = [1, 2, 3, 4, 5];
+  assertEquals(items, toArray(items.slice()));
+  const asd = items.map((x) => Promise.resolve(x));
+  const fromArrayAsync = await toArray(asd);
+  assertEquals(items, fromArrayAsync);
+  const fromIter = toArray((function* () {
     yield* items;
-  };
-  const result = toArray(gen());
-  assertEquals(result, items);
+  })());
+  assertEquals(items, fromIter);
+  const fromIterAsyncMixed = await toArray(
+    Iterator.from(items).map((x, i) => i > 1 ? Promise.resolve(x) : x),
+  );
+  assertEquals(items, fromIterAsyncMixed);
+  const fromIterAsync = await toArray(
+    Iterator.from(items).map((x) => Promise.resolve(x)),
+  );
+  assertEquals(items, fromIterAsync);
+  const fromAsyncIter = await toArray((async function* () {
+    yield* await Promise.resolve(items);
+  })());
+  assertEquals(items, fromAsyncIter);
 });
