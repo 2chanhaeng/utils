@@ -2,6 +2,8 @@
 /html_cov
 /cov_profile
 
+*.ipynb
+
 # Created by https://www.toptal.com/developers/gitignore/api/macos,deno
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,deno
 
