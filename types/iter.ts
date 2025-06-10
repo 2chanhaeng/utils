@@ -26,6 +26,13 @@ export interface Mappable<T> {
 export type Filterable<T> =
   | Iterables<T>
   | { filter: (f: Predicate<T>) => Filterable<T> };
+/**
+ * Filter function that takes a predicate.
+ */
+export interface FilterAttached<T, S> {
+  (iter: Iterable<T>): Generator<S>;
+  (iter: AsyncIterable<T>): AsyncGenerator<S>;
+}
 
 /**
  * Function that takes two arguments(and index) and returns a value.

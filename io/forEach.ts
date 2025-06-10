@@ -1,8 +1,4 @@
-import { toArray } from "array";
-import { tryCopy } from "atom";
 import tap from "./tap.ts";
-import { map } from "iter";
-import pipe from "pipe";
 
 /**
  * Applies a given function to each element of an iterable for side effects and returns the iterable.
@@ -23,6 +19,6 @@ import pipe from "pipe";
  */
 export default function forEach<T>(
   f: (x: T) => unknown,
-): (x: Iterable<T>) => Iterable<T> {
-  return tap(pipe(tryCopy, map(f), toArray));
+): (x: Iterable<T>) => T[] {
+  return (x: Iterable<T>) => Array.from(x, tap(f));
 }

@@ -1,6 +1,3 @@
-import { toArray } from "array";
-import take from "./take.ts";
-
 /**
  * ```haskell
  * batch::Int -> [a] -> [[a]]
@@ -11,14 +8,14 @@ export default function batch(
   size: number,
 ): <T>(iter: Iterable<T>) => Generator<T[]> {
   return function* <T>(iter: Iterable<T>): Generator<T[]> {
-    yield* batcher(size, Iterator.from(iter));
+    let batch: T[] = [];
+    for (const i of Iterator.from(iter)) {
+      batch.push(i);
+      if (batch.length === size) {
+        yield batch;
+        batch = [];
+      }
+    }
+    if (batch.length) yield batch;
   };
-}
-
-function* batcher<T>(size: number, iter: IteratorObject<T>): Generator<T[]> {
-  while (true) {
-    const batch = toArray(take(size)(iter));
-    if (!batch.length) return;
-    yield batch;
-  }
 }

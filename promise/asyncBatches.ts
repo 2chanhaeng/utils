@@ -1,9 +1,8 @@
 import { map } from "iter";
-import pipe from "pipe";
 
 /**
  * ```haskell
- * awaitBatches::(a -> Promise b) -> [[a]] -> [Promise [b]]
+ * asyncBatches::(a -> Promise b) -> [[a]] -> [Promise [b]]
  * ```
  * Maps each `iter` in `iters` to a `Promise` that resolves when all
  * items in the `iter` have been processed using the provided asynchronous
@@ -44,7 +43,7 @@ import pipe from "pipe";
  * // Item: 6, Second: 3, Item: 7, Second: 3, Item: 8, Second: 3
  */
 export default function asyncBatches<T, S>(
-  f: (a: T) => Promise<S>,
-): (iters: Iterable<Iterable<T>>) => Generator<Promise<S[]>> {
-  return pipe(Iterator.from, map(pipe(map(f), Array.fromAsync<S>)));
+  f: (a: T) => PromiseLike<S>,
+): (iters: Iterable<Iterable<T>>) => Generator<Promise<Awaited<S>[]>> {
+  return map((it) => Promise.all(map(f)(it)));
 }

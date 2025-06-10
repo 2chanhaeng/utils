@@ -35,6 +35,9 @@ Deno.test("forEach", () => {
   const push = forEach((x: number) => arr.push(x));
   push([1, 2, 3]);
   assertEquals(arr, [1, 2, 3]);
+  const origin = Array.from(push(Iterator.from([4, 5, 6])));
+  assertEquals(arr, [1, 2, 3, 4, 5, 6]);
+  assertEquals(origin, [4, 5, 6]);
 });
 
 Deno.test("forEachAsync", async () => {
@@ -42,17 +45,19 @@ Deno.test("forEachAsync", async () => {
   const sec = () => new Date().getSeconds();
 
   // An async function that logs the current second after a delay.
-  const secWithDelay = async (_: unknown) => {
+  const secWithDelay = async (_: number) => {
     await delay(1000); // 1-second delay
     arr.push(sec());
   };
 
   arr.push(sec());
-  await forEachAsync(secWithDelay)([1, 2, 3, 4, 5]);
-  const result = arr.map((x, i) => (60 + x - i) % 60).reduce((a, b) =>
-    a === b ? a : -1
+  const origin = [1, 2, 3, 4, 5];
+  const copied = Array.from(await forEachAsync(secWithDelay)(origin));
+  const result = arr.map((x, i) => (60 + x - i) % 60).every((x) =>
+    x === arr[0]
   );
-  assertEquals(result, arr[0]);
+  assertEquals(result, true);
+  assertEquals(copied, origin);
 });
 
 Deno.test("tap", () => {

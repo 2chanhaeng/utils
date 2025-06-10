@@ -1,7 +1,3 @@
-import { tryCopy } from "atom";
-import { map, toIter } from "iter";
-import pipe from "pipe";
-import { toAsync } from "promise";
 import tapAsync from "./tapAsync.ts";
 
 /**
@@ -29,6 +25,19 @@ import tapAsync from "./tapAsync.ts";
  */
 export default function forEachAsync<T>(
   f: (x: T) => unknown,
-): (x: Iterable<T>) => Promise<Iterable<T>> {
-  return tapAsync<Iterable<T>>(pipe(tryCopy, toIter, map(f), toAsync));
+): {
+  (xs: Promise<Iterable<T>>): Promise<Awaited<T>[]>;
+  (xs: Promise<ArrayLike<T>>): Promise<Awaited<T>[]>;
+  (xs: Iterable<T>): Promise<Awaited<T>[]>;
+  (xs: ArrayLike<T>): Promise<Awaited<T>[]>;
+  (xs: AsyncIterable<T>): Promise<Awaited<T>[]>;
+} {
+  return async (
+    xs:
+      | Promise<Iterable<T>>
+      | Promise<ArrayLike<T>>
+      | Iterable<T>
+      | ArrayLike<T>
+      | AsyncIterable<T>,
+  ): Promise<Awaited<T>[]> => Array.fromAsync(await xs, tapAsync(f));
 }
