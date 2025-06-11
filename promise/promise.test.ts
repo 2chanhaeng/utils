@@ -6,6 +6,7 @@ import {
   guarantee,
   lift,
   liftMap,
+  settle,
   toAsync,
 } from "./mod.ts";
 import { map } from "iter";
@@ -125,6 +126,20 @@ Deno.test("liftMap", async () => {
     value: 3,
   }));
   assertEquals(rejectedAsyncLift, { value: 0 });
+});
+
+Deno.test("settle", async () => {
+  const isEven = (i: number) => i % 2 === 0 ? i : Promise.reject("Odd");
+  const settled = settle(isEven)([0, 1, 2, 3, 4]);
+  const results = await Array.fromAsync(settled);
+  assertEquals(results[0].status, "fulfilled");
+  if (results[0].status === "fulfilled") {
+    assertEquals(results[0].value, 0);
+  }
+  assertEquals(results[1].status, "rejected");
+  if (results[1].status === "rejected") {
+    assertEquals(results[1].reason, "Odd");
+  }
 });
 
 Deno.test("toAsync", async () => {
