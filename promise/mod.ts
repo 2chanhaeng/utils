@@ -13,4 +13,5 @@ export { default as guarantee } from "./guarantee.ts";
 export { default as lift } from "./lift.ts";
 export { default as liftMap } from "./liftMap.ts";
 export { default as settle } from "./settle.ts";
+export { default as takeWhileResolved } from "./takeWhileResolved.ts";
 export { default as toAsync } from "./toAsync.ts";

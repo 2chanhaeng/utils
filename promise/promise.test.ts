@@ -7,6 +7,7 @@ import {
   lift,
   liftMap,
   settle,
+  takeWhileResolved,
   toAsync,
 } from "./mod.ts";
 import { map } from "iter";
@@ -140,6 +141,14 @@ Deno.test("settle", async () => {
   if (results[1].status === "rejected") {
     assertEquals(results[1].reason, "Odd");
   }
+});
+
+Deno.test("takeWhileResolved", async () => {
+  const isEven = (i: number) =>
+    i % 2 === 0 ? Promise.resolve(i) : Promise.reject("Odd");
+  const results = takeWhileResolved(isEven)([0, 2, 4, 5, 6]);
+  const resolvedResults = await Array.fromAsync(results);
+  assertEquals(resolvedResults, [0, 2, 4]);
 });
 
 Deno.test("toAsync", async () => {
