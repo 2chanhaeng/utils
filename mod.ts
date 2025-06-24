@@ -5,6 +5,7 @@
 export { default as apply } from "./apply/mod.ts";
 export * from "./array/mod.ts";
 export * from "./atom/mod.ts";
+export * from "./bool/mod.ts";
 export * from "./date/mod.ts";
 export * from "./error/mod.ts";
 export * from "./io/mod.ts";
