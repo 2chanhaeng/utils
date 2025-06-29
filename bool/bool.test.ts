@@ -1,7 +1,7 @@
 import { assertEquals } from "@std/assert";
-import { not } from "./mod.ts";
+import { all, not } from "./mod.ts";
 
-Deno.test(() => {
+Deno.test("not", () => {
   const isEven = (x: number) => x % 2 === 0;
   const isOdd = not(isEven);
   assertEquals(isOdd(3), true);
@@ -15,4 +15,9 @@ Deno.test(() => {
   const userWithoutRole: User = { id: 2 };
   assertEquals(isUserWithoutRole(userWithRole), false);
   assertEquals(isUserWithoutRole(userWithoutRole), true);
+});
+
+Deno.test("all", () => {
+  assertEquals(all([1, 2, 3]), true);
+  assertEquals(all([1, 0, 3]), false);
 });
