@@ -114,6 +114,15 @@ Deno.test("pluck", () => {
   assertEquals(pluckedWithDefaultValue, { a: 1, c: 3, d: 4 });
   const notObject = () => pluck([])(1);
   assertThrows(notObject);
+
+  interface PluckTest {
+    a: number;
+    b?: number;
+    c: number | undefined;
+  }
+  const pluckTest: PluckTest = { a: 1, c: undefined };
+  const pluckedTest = pluck(["a", "b", "c"], 0)(pluckTest);
+  assertEquals(pluckedTest, { a: 1, b: 0, c: 0 });
 });
 
 Deno.test("separate", () => {

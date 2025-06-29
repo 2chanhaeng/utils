@@ -19,19 +19,19 @@ export default function pluck<
 ): <T extends object>(
   obj: Partial<T>,
 ) => {
-  [K in Key]: K extends keyof T ? T[K] : DefaultValue;
+  [K in Key]: K extends keyof T ? (T[K] | DefaultValue) : DefaultValue;
 } {
   return <T extends object>(
     obj: Partial<T>,
   ): {
-    [K in Key]: K extends keyof T ? T[K] : DefaultValue;
+    [K in Key]: K extends keyof T ? (T[K] | DefaultValue) : DefaultValue;
   } => {
     if (!isObject(obj)) throw new TypeError("Expected an object");
     return Object.fromEntries(
       Iterator.from(keys)
         .map((key) => [key, obj[key as (keyof T & Key)] ?? defaultValue]),
     ) as {
-      [K in Key]: K extends keyof T ? T[K] : DefaultValue;
+      [K in Key]: K extends keyof T ? (T[K] | DefaultValue) : DefaultValue;
     };
   };
 }
