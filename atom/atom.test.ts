@@ -1,10 +1,11 @@
 import {
   assertEquals,
+  assertInstanceOf,
   assertNotEquals,
   assertNotStrictEquals,
   assertStrictEquals,
 } from "@std/assert";
-import { always, identity, tryCopy } from "./mod.ts";
+import { always, identity, to, tryCopy } from "./mod.ts";
 
 Deno.test("always", () => {
   const one = 1;
@@ -23,6 +24,14 @@ Deno.test("identity", () => {
   const one = [1];
   assertEquals(one, identity(one));
   assertStrictEquals(one, identity(one));
+});
+
+Deno.test("to", () => {
+  const url = "https://example.com/";
+  const toUrl = to(URL);
+  const urlInstance = toUrl(url);
+  assertInstanceOf(urlInstance, URL);
+  assertEquals(urlInstance.href, url);
 });
 
 Deno.test("tryCopy", () => {
