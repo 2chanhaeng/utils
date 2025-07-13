@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { all, any, not } from "./mod.ts";
+import { all, any, not, some } from "./mod.ts";
 
 Deno.test("all", () => {
   assertEquals(all([1, 2, 3]), true);
@@ -9,6 +9,16 @@ Deno.test("all", () => {
 Deno.test("any", () => {
   assertEquals(any([0, 1, 0]), true);
   assertEquals(any([0, 0, 0]), false);
+});
+
+Deno.test("some", () => {
+  const isEven = (x: number) => x % 2 === 0;
+  const isOdd = (x: number) => x % 2 !== 0;
+
+  assertEquals(some(isEven)([1, 3, 5]), false);
+  assertEquals(some(isEven)([1, 2, 3]), true);
+  assertEquals(some(isOdd)([2, 4, 6]), false);
+  assertEquals(some(isOdd)([1, 2, 3]), true);
 });
 
 Deno.test("not", () => {
