@@ -9,8 +9,6 @@
     "lcov": "deno test --allow-all --coverage=cov/ && deno coverage --lcov cov/ > cov.lcov && rm -rf cov && genhtml -o html_cov cov.lcov && rm cov.lcov && open html_cov/index.html"
   },
   "imports": {
-    "/": "./",
-    "./": "./",
     "apply": "./apply/mod.ts",
     "array": "./array/mod.ts",
     "atom": "./atom/mod.ts",
