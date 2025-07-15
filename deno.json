@@ -6,7 +6,8 @@
   "tasks": {
     "dev": "deno run --watch main.ts",
     "cov": "deno test --allow-all --coverage=cov/ && deno coverage cov/ && rm -rf cov",
-    "lcov": "deno test --allow-all --coverage=cov/ && deno coverage --lcov cov/ > cov.lcov && rm -rf cov && genhtml -o html_cov cov.lcov && rm cov.lcov && open html_cov/index.html"
+    "lcov": "deno test --allow-all --coverage=cov/ && deno coverage --lcov cov/ > cov.lcov && rm -rf cov && genhtml -o html_cov cov.lcov && rm cov.lcov && open html_cov/index.html",
+    "deploy": "deno fmt --check && deno lint && deno task cov && git branch --show-current | grep -q '^main$' && git diff --exit-code && git diff --cached --exit-code && git push && git checkout deploy && git merge main && git push && git checkout main"
   },
   "imports": {
     "apply": "./apply/mod.ts",
