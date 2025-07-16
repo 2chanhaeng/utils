@@ -11,12 +11,14 @@ import type { ItemsItem } from "types";
  * @returns {Generator<ChainGen<T>>} A generator that yields elements from each iterable in sequence.
  *
  * @example
+ * ```ts
  * const iter1 = new Set([1, 2, 3]);
  * const iter2 = new Set(['a', 'b', 'c']);
  * const chained = chain([iter1, iter2]);
  *
  * console.log(Array.from(chained));
  * // Output: [1, 2, 3, 'a', 'b', 'c']
+ * ```
  */
 export default function* chain<T extends Iterable<unknown>>(
   iters: T,
