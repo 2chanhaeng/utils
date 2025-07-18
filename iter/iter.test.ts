@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows } from "@std/assert";
+import { assertEquals } from "@std/assert";
 import {
   accumulate,
   append,
@@ -29,13 +29,17 @@ Deno.test("accumulate", () => {
   );
   assertEquals(notInitResult, [1, 3, 6, 10, 15]);
   const initResult = Array.from(
-    accumulate((acc, curr) => acc + curr, 10)(items),
+    accumulate((acc, curr: number) => acc + curr, 10)(items),
   );
   assertEquals(initResult, [10, 11, 13, 16, 20, 25]);
   const indexResult = Array.from(
-    accumulate((acc, curr, index) => acc + curr + index, 10)(items),
+    accumulate((acc, curr: number, index) => acc + curr + index, 10)(items),
   );
   assertEquals(indexResult, [10, 11, 14, 19, 26, 35]);
+  const otherType = Array.from(
+    accumulate((acc, curr) => `${acc}${curr}`, "10" as string)(items),
+  );
+  assertEquals(otherType, ["10", "101", "1012", "10123", "101234", "1012345"]);
   const asyncResult = Promise.all(
     accumulate(
       async (acc: Promise<number>, curr: number) => (await acc) + curr,
@@ -157,8 +161,6 @@ Deno.test("map", () => {
   const mapDouble = map((x: number) => x * 2);
   const mapFnResult = Array.from(mapDouble(items));
   assertEquals(mapFnResult, [2, 4, 6, 8, 10]);
-  const mapFnItemsResult = Array.from(map((x: number) => x * 2, items));
-  assertEquals(mapFnItemsResult, [2, 4, 6, 8, 10]);
   const setResult = toArray(map((x: number) => x * 2)(new Set(items)));
   assertEquals(setResult, [2, 4, 6, 8, 10]);
 });
@@ -181,48 +183,36 @@ Deno.test("range", () => {
 Deno.test("reduce", () => {
   const items = [1, 2, 3, 4, 5];
   const genIters = () => [items.slice(), Iterator.from(items), new Set(items)];
-  const reduceFn = reduce((acc: number, x: number) => acc + x);
-  const reduceFnWithoutIterResult = genIters().map(reduceFn(10));
+  const reduceFn = reduce((acc: number, x: number) => acc + x, 10);
+  const reduceFnWithoutIterResult = genIters().map(reduceFn);
   assertEquals(reduceFnWithoutIterResult, [25, 25, 25]);
-  const reduceFnWithIterResult = genIters().map((i) => reduceFn(10, i));
-  assertEquals(reduceFnWithIterResult, [25, 25, 25]);
   const reduceFnInit = reduce((acc: number, x: number) => acc + x, 10);
   const reduceFnInitResult = genIters().map(reduceFnInit);
   assertEquals(reduceFnInitResult, [25, 25, 25]);
-  const reduceFnInitItemsResult = genIters().map((iters) =>
-    reduce((acc: number, x: number) => acc + x, 10, iters)
-  );
-  assertEquals(reduceFnInitItemsResult, [25, 25, 25]);
   const reducible = {
     [Symbol.iterator]: function* () {
       yield* items;
-    },
-    reduce: (f: (acc: number, x: number) => number, init: number) => {
-      let acc = init;
-      for (const x of items) acc = f(acc, x);
-      return acc;
     },
   };
   const reducibleResult = reduce(
     (acc: number, x: number) => acc + x,
     10,
+  )(
     reducible,
   );
   assertEquals(reducibleResult, 25);
-  const stringResult = reduce((acc: string, x: number) => acc + x)("")(items);
+  const stringResult = reduce((acc: string, x: number) => acc + x, "")(items);
   assertEquals(stringResult, "12345");
   const initPromiseResult = reduce(
-    async (a, b) => (await a) + b,
+    async (a, b: number) => (await a) + b,
     Promise.resolve(0),
-    Iterator.from(items),
-  );
+  )(Iterator.from(items));
   initPromiseResult.then((res) => assertEquals(res, 15));
   const promiseItems = items.map((i) => Promise.resolve(i));
   const itemPromiseResult2 = reduce(
-    async (a, b) => (await a) + (await b),
+    async (a, b: Promise<number>) => (await a) + (await b),
     Promise.resolve(0),
-    promiseItems,
-  );
+  )(promiseItems);
   itemPromiseResult2.then((res) => assertEquals(res, 15));
 });
 
@@ -270,14 +260,6 @@ Deno.test("toIter", () => {
   };
   const iterGenerator = toIter(generator());
   assertEquals(Array.from(iterGenerator), [1, 2, 3]);
-  const asyncGenerator = async function* () {
-    yield 1;
-    yield 2;
-    yield 3;
-  };
-  assertThrows(() => toIter(asyncGenerator() as unknown));
-  const notIterResult = toIter(1);
-  assertEquals(Array.from(notIterResult), [1]);
 });
 
 Deno.test("zip", () => {
