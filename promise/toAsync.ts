@@ -1,50 +1,29 @@
-import { isAsyncIterable, isIterable } from "pred";
-
 /**
  * ```haskell
  * toAsync::a -> Promise a
  * toAsync::[Promise a] -> Promise [a]
  * ```
- * Converts a value to a Promise. If the value is an iterable, it converts each element to a Promise and returns a Promise of an array of resolved values.
+ * Converts an iterable or async iterable to a promise that resolves to an array of awaited values.
+ * Alias for `Array.fromAsync`.
  *
- * @template T - The type of the input value.
- *
- * @param {T} a - The value to be converted to a Promise. If the value is an iterable, each element will be converted to a Promise.
- *
- * @returns {T extends Iterable<infer U> ? Promise<Awaited<U>[]> : Promise<Awaited<T>>}
- * - A Promise of the input value. If the input value is an iterable, it returns a Promise of an array of resolved values.
+ * @param {Iterable<T> | AsyncIterable<T>} iter - An iterable or async iterable of type T.
+ * @return {Promise<Awaited<T>[]>} A promise that resolves to an array of awaited values of type T.
  *
  * @example
- * // Example with a non-iterable value
- * const result = await toAsync(42);
- * console.log(result); // Output: 42
+ * ```ts
+ * const promises = await toAsync([Promise.resolve(1), Promise.resolve(2)]);
+ * console.log(promises); // Output: [1, 2]
  *
- * @example
- * // Example with an iterable value
- * const result = await toAsync([Promise.resolve(1), Promise.resolve(2)]);
- * console.log(result); // Output: [1, 2]
- *
- * @example
- * // Example with a string (iterable)
- * const result = await toAsync("hello");
- * console.log(result); // Output: ['h', 'e', 'l', 'l', 'o']
+ * const asyncIterable = (async function*() {
+ *   yield Promise.resolve(3);
+ *   yield Promise.resolve(4);
+ * })();
+ * const asyncPromises = await toAsync(asyncIterable);
+ * console.log(asyncPromises); // Output: [3, 4]
+ * ```
  */
 export default function toAsync<T>(
-  a: T,
-): T extends Iterable<infer U> ? Promise<Awaited<U>[]>
-  : T extends AsyncIterable<infer U> ? Promise<Awaited<U>[]>
-  : Promise<Awaited<T>> {
-  if (isIterable<T extends Iterable<infer U> ? U : never>(a)) {
-    return Array.fromAsync(a) as T extends Iterable<infer U>
-      ? Promise<Awaited<U>[]>
-      : never;
-  } else if (isAsyncIterable<T extends AsyncIterable<infer U> ? U : never>(a)) {
-    return Array.fromAsync(a) as T extends Iterable<infer _> ? never
-      : T extends AsyncIterable<infer U> ? Promise<Awaited<U>[]>
-      : never;
-  } else {
-    return Promise.resolve(a) as T extends Iterable<infer _> ? never
-      : T extends AsyncIterable<infer _> ? never
-      : Promise<Awaited<T>>;
-  }
+  iter: Iterable<T> | AsyncIterable<T>,
+): Promise<Awaited<T>[]> {
+  return Array.fromAsync<T>(iter) as Promise<Awaited<T>[]>;
 }
