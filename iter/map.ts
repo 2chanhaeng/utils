@@ -16,10 +16,7 @@
  * ```
  */
 export default function map<T, S>(
-  f: {
-    (x: T): S;
-    (x: T, i: number): S;
-  },
+  f: (x: T, i: number) => S,
 ): (iter: Iterable<T>) => IterableIterator<S> {
   return (iter: Iterable<T>) => Iterator.from(iter).map(f);
 }
