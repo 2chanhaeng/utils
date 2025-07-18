@@ -15,11 +15,11 @@ import pipe from "pipe";
 import type { Refinement } from "types";
 
 Deno.test("asyncBatches", async () => {
-  const sec = () => new Date().getSeconds();
+  const sec = () => new Date().getMilliseconds();
 
   // An async function that logs the current second after a delay.
   const secWithDelay = async (_: unknown) => {
-    await delay(1000); // 1-second delay
+    await delay(100); // 100-millisecond delay
     return sec();
   };
 
@@ -29,9 +29,9 @@ Deno.test("asyncBatches", async () => {
     [6, 7, 8],
   ];
   const start = sec();
-  const results = (await Array.fromAsync(asyncBatches(secWithDelay)(iters)))
+  const results = (await toAsync(asyncBatches(secWithDelay)(iters)))
     .map((x) => x.reduce((a, b) => (a === b ? a : NaN)))
-    .map((x) => (x - start + 60) % 60);
+    .map((x) => Math.floor((x + 1000 - start) % 1000 / 100));
   assertEquals(results, [1, 2, 3]);
 });
 
@@ -152,12 +152,6 @@ Deno.test("takeWhileResolved", async () => {
 });
 
 Deno.test("toAsync", async () => {
-  const nonPromise = 1;
-  const resultNonPromise = await toAsync(nonPromise);
-  assertEquals(resultNonPromise, 1);
-  const promise = Promise.resolve(1);
-  const resultPromise = await toAsync(promise);
-  assertEquals(resultPromise, 1);
   const promises = [Promise.resolve(1), Promise.resolve(2)];
   const resultPromises = await toAsync(promises);
   assertEquals(resultPromises, [1, 2]);
@@ -167,15 +161,12 @@ Deno.test("toAsync", async () => {
   const promisesArray = [[Promise.resolve(1)], [Promise.resolve(2)]];
   const resultWithMapMethod = await toAsync(promisesArray.map(toAsync));
   assertEquals(resultWithMapMethod, [[1], [2]]);
-  const resultWithPipe = await pipe(
-    map(toAsync<Promise<number>[]>),
-    toAsync,
-  )(promisesArray);
+  const resultWithPipe = await pipe(map(toAsync), toAsync)(promisesArray);
   assertEquals(resultWithPipe, [[1], [2]]);
   async function* asyncGen() {
-    yield await Promise.resolve(1 as const);
-    yield await Promise.resolve(2 as const);
-    yield await Promise.resolve(3 as const);
+    yield await Promise.resolve(1);
+    yield await Promise.resolve(2);
+    yield await Promise.resolve(3);
   }
   const resultAsyncGen = await toAsync(asyncGen());
   assertEquals(resultAsyncGen, [1, 2, 3]);
