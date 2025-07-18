@@ -1,26 +1,24 @@
-import { isIterator } from "pred";
-import reduce from "./reduce.ts";
-
 /**
  * ```haskell
  * fold::(a, a) -> [a] -> a
  * fold::(a, a, Int) -> [a] -> a
+ * ```
+ *
+ * Fold an iterable to a single value.
  * {@link reduce} with the first element as the initial value.
+ *
+ * @param {(acc: T, x: T, i: number) => T} f - The folding function.
+ * @return {(iter: Iterable<T>) => T} A function that takes an iterable and returns the folded value.
+ *
+ * @example
+ * ```ts
+ * const items = [1, 2, 3, 4, 5];
+ * const result = fold((acc, x) => acc + x)(items);
+ * console.log(result); // 15
+ * ```
  */
 export default function fold<T>(
   f: (acc: T, x: T, i: number) => T,
-): (iter: Iterable<T>) => T;
-export default function fold<T>(
-  f: (acc: T, x: T, i: number) => T,
-  iter: Iterable<T>,
-): T;
-export default function fold<T>(
-  f: (acc: T, x: T, i: number) => T,
-  iter?: Iterable<T>,
-): T | ((iter: Iterable<T>) => T) {
-  if (iter === undefined) return (iter: Iterable<T>) => fold(f, iter);
-  if (Array.isArray(iter)) return reduce(f, iter[0], iter.slice(1));
-  if (isIterator(iter)) return reduce<T, T>(f, iter.next().value as T, iter);
-  const iterator = Iterator.from(iter);
-  return reduce(f, iterator.next().value!, iterator);
+): (iter: Iterable<T>) => T {
+  return (iter: Iterable<T>) => Iterator.from(iter).reduce(f);
 }

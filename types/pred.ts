@@ -13,8 +13,10 @@ export type PredicateLike<T> = (
 /**
  * Refine type A to type B.
  */
-export interface Refinement<A, B extends A> {
+export interface Refinement<A, B> {
+  // @ts-ignore: Flexible type guard
   (a: A): a is B;
+  // @ts-ignore: Flexible type guard with index
   (a: A, i: number): a is B;
 }
 export type PromiseRefinement<T, U extends T> = (

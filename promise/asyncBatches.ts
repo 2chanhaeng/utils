@@ -1,5 +1,3 @@
-import { map } from "iter";
-
 /**
  * ```haskell
  * asyncBatches::(a -> Promise b) -> [[a]] -> [Promise [b]]
@@ -11,10 +9,7 @@ import { map } from "iter";
  *
  * @template T - The type of elements in the input arrays.
  * @template S - The type of elements returned by the promise from function `f`.
- *
  * @param {function(T): Promise<S>} f - An asynchronous function that takes an element of type `T` and returns a promise resolving to type `S`.
- * @param {T[][]} iters - A two-dimensional array, where each `iter` is an array of items of type `T` to be processed by the function `f`.
- *
  * @returns {Promise<S[]>[]} - An array of promises, each resolving to an array of results from processing each `iter` sequentially.
  *
  * @example
@@ -45,5 +40,7 @@ import { map } from "iter";
 export default function asyncBatches<T, S>(
   f: (a: T) => PromiseLike<S>,
 ): (iters: Iterable<Iterable<T>>) => Generator<Promise<Awaited<S>[]>> {
-  return map((it) => Promise.all(map(f)(it)));
+  return function* (iters) {
+    for (const iter of iters) yield Promise.all(Array.from(iter, f));
+  };
 }

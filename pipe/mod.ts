@@ -105,7 +105,7 @@ function pipe(
         : unknown[];
   }
   return (...x: Parameters<typeof f0>) =>
-    reduce(apply, f0(...x), fns) as HasReturnPromise<
+    fns.reduce(apply, f0(...x)) as HasReturnPromise<
       Init<typeof fns>
     > extends true
       ? LastReturn<typeof fns> extends Promise<infer U> ? Promise<U>

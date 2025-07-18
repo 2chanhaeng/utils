@@ -1,5 +1,4 @@
-import type { Predicate, PredicateLike } from "types";
-import enumerate from "./enumerate.ts";
+import type { Predicate, PredicateLike, Refinement } from "types";
 
 /**
  * ```haskell
@@ -17,16 +16,17 @@ import enumerate from "./enumerate.ts";
  * // [3, 4, 5]
  * ```
  */
-export default function dropWhile<T>(
-  f: Predicate<T> | PredicateLike<T>,
-): (iter: Iterable<T>) => Generator<T> {
+export default function dropWhile<T, S>(
+  f: Predicate<T> | PredicateLike<T> | Refinement<T, S>,
+): (iter: Iterable<T>) => //
+typeof f extends Refinement<T, S> ? Generator<S> : Generator<T> {
   return function* (iter: Iterable<T>): Generator<T> {
-    const iterator = Iterator.from(iter);
-    for (const [item, index] of enumerate(iterator)) {
-      if (f(item, index)) continue;
+    const iterator = Iterator.from(iter).map((x, i) => [x, f(x, i)] as const);
+    for (const [item, condition] of iterator) {
+      if (condition) continue;
       else {
         yield item;
-        yield* iterator;
+        yield* iterator.map(([x]) => x);
         return;
       }
     }
