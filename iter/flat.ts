@@ -15,9 +15,11 @@ import { isChar, isIterable } from "pred";
  * @returns A generator that yields the flattened elements.
  *
  * @example
+ * ```ts
  * const nestedArrays = [[1, 2], [3, [4, 5]]];
  * const flatGenerator = flat(1)(nestedArrays);
  * console.log([...flatGenerator]); // Output: [1, 2, 3, [4, 5]]
+ * ```
  */
 export default function flat<N extends number>(
   depth: N = Infinity as N,

@@ -50,7 +50,7 @@ export type Reducible<T> =
   | { reduce: <U>(f: Reducer<T, U>, init: U) => U };
 
 /**
- * Genric type to represent the types of the items in iterables.
+ * Generic type to represent the types of the items in iterables.
  */
 export type ItersItems<T extends Iterable<unknown>[]> = T extends [] ? []
   : T extends [infer Head, ...infer Tail]

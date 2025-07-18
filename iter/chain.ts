@@ -3,6 +3,7 @@ import type { ItemsItem } from "types";
 /**
  * ```haskell
  * chain::[[a]] -> [a]
+ * ```
  *
  * This function takes an array of iterables and yields each element from each iterable in sequence.
  *

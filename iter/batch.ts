@@ -4,8 +4,10 @@
  * ```
  *
  * Split an iterable into batches of given size.
+ *
  * @param {number} size - The size of each batch.
  * @return {Generator<T[]>} An iterator that yields batches of elements.
+ *
  * @example
  * ```ts
  * Array.from(batch(3, [1, 2, 3, 4, 5, 6, 7, 8, 9]));

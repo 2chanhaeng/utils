@@ -7,6 +7,7 @@
  *
  * @param {Iterable<T>} iter - The iterable to enumerate.
  * @return {IterableIterator<[T, number]>} An iterator that yields tuples of each element and its index.
+ *
  * @example
  * ```ts
  * Array.from(enumerate(['a', 'b', 'c']));
