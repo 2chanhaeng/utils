@@ -12,6 +12,7 @@
  * @returns {(record: T) => Return} - A function that takes a record and invokes the specified method with the provided arguments.
  *
  * @example
+ * ```ts
  * // Define a record with a method
  * const record = {
  *   greet: (name: string) => `Hello, ${name}!`
@@ -22,6 +23,7 @@
  *
  * // Invoke the method on the record
  * console.log(greetWorld(record)); // Output: "Hello, World!"
+ * ```
  */
 export default function method<K extends PropertyKey, Arg, Args extends Arg[]>(
   key: K,

@@ -10,9 +10,11 @@
  * @returns A function that takes a promise of type `T` and returns a promise of type `S`, applying the appropriate transformation based on whether the input promise is resolved or rejected.
  *
  * @example
+ * ```ts
  * const doubleOrZero = bimap((a) => a * 2, () => 0);
  * console.log(await doubleOrZero(Promise.resolve(3))); // Logs: 6
  * console.log(await doubleOrZero(Promise.reject("error"))); // Logs: 0
+ * ```
  */
 export default function bimap<T, S, U>(
   onResolved: (a: T) => Promise<S> | S,

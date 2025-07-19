@@ -12,10 +12,12 @@
  *          - The second object contains the remaining properties.
  *
  * @example
+ * ```ts
  * const obj = { a: 1, b: 2, c: 3 };
  * const [picked, omitted] = separate(['a', 'c'])(obj);
  * console.log(picked); // { a: 1, c: 3 }
  * console.log(omitted); // { b: 2 }
+ * ```
  */
 export default function separate<K extends string>(
   keys: K[],

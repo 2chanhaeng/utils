@@ -13,6 +13,7 @@
  * @returns {Promise<S[]>[]} - An array of promises, each resolving to an array of results from processing each `iter` sequentially.
  *
  * @example
+ * ```ts
  * const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  * const sec = () => new Date().getSeconds();
  *
@@ -36,6 +37,7 @@
  * // Item: 1, Second: 1, Item: 2, Second: 1, Item: 3, Second: 1
  * // Item: 4, Second: 2, Item: 5, Second: 2
  * // Item: 6, Second: 3, Item: 7, Second: 3, Item: 8, Second: 3
+ * ```
  */
 export default function asyncBatches<T, S>(
   f: (a: T) => PromiseLike<S>,

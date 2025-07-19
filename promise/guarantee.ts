@@ -8,9 +8,11 @@ import lift from "./lift.ts";
  * @returns {Promise<T>} A Promise that resolves with the value if it is not null or undefined.
  *
  * @example
+ * ```ts
  * const value = 42;
  * guarantee(value).then(console.log); // 42
  * guarantee(null).then(console.log); // Uncaught (in promise): null
+ * ```
  */
 export default function guarantee<T>(a: T | null | undefined): Promise<T> {
   return lift<T | null | undefined, T>((a) => a !== null && a !== undefined)(a);

@@ -4,6 +4,7 @@
  *
  * @param {Iterable<T>} iter - The iterable to convert to an array.
  * @return {T[]} An array containing the elements of the iterable.
+ *
  * @example
  * ```ts
  * const items = new Set([1, 2, 3]);

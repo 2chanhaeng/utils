@@ -8,6 +8,7 @@
  * resolve to the results of applying the function,
  * wrapped in a `PromiseSettledResult` object.
  * Inspired by `Promise.allSettled`.
+ *
  * @param {(x: T) => S} f A function that takes a value of type T and returns a value of type S.
  * @returns {(xs: Iterable<PromiseLike<T> | T>) => Generator<Promise<PromiseSettledResult<Awaited<S>>>>} A generator that yields promises that resolve to the results of applying f to the input values.
  *

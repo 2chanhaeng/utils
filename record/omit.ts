@@ -9,9 +9,11 @@
  * @returns {function(T): Omit<T, K>} A function that takes an object and returns a new object with the specified keys omitted.
  *
  * @example
+ * ```ts
  * const obj = { a: 1, b: 2, c: 3 };
  * const result = omit(['a', 'c'])(obj);
  * console.log(result); // { b: 2 }
+ * ```
  */
 export default function omit<K extends string>(
   keys: K[],

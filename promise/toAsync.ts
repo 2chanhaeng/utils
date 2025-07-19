@@ -1,8 +1,8 @@
 /**
  * ```haskell
- * toAsync::a -> Promise a
  * toAsync::[Promise a] -> Promise [a]
  * ```
+ *
  * Converts an iterable or async iterable to a promise that resolves to an array of awaited values.
  * Alias for `Array.fromAsync`.
  *

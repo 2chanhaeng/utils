@@ -17,7 +17,7 @@ import type { Refinement } from "types";
  * @returns A function that takes a value (or a promise of a value) and returns a promise of the result of either the onTrue or onFalse function.
  *
  * @example
- * ```typescript
+ * ```ts
  * const isEven = (n: number): boolean => n % 2 === 0;
  * const double = (n: number): number => n * 2;
  * const triple = (n: number): number => n * 3;
