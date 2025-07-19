@@ -2,6 +2,7 @@ import { assertEquals } from "@std/assert";
 import {
   bind,
   bindTo,
+  bucket,
   get,
   merge,
   method,
@@ -45,6 +46,18 @@ Deno.test("bindTo", async () => {
   assertEquals(bound, { foo: "bar" });
   const promiseBound = await bindTo("baz")(Promise.resolve(bound));
   assertEquals(promiseBound, { baz: { foo: "bar" } });
+});
+
+Deno.test("bucket", () => {
+  const items = [1, 2, 3, 4, 5, 6, 7];
+  const bucketed = bucket((x: number) => (x % 2 === 0 ? "even" : "odd"))(items);
+  assertEquals(bucketed, { even: [2, 4, 6], odd: [1, 3, 5, 7] });
+
+  const bucketedWithValidation = bucket(
+    (x: number) => (x % 2 === 0 ? "even" : "odd"),
+    (x) => x % 3 !== 0,
+  )(items);
+  assertEquals(bucketedWithValidation, { even: [2, 4], odd: [1, 5, 7] });
 });
 
 Deno.test("get", () => {
