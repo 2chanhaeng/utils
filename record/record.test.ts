@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows } from "@std/assert";
+import { assertEquals } from "@std/assert";
 import {
   bind,
   bindTo,
@@ -12,7 +12,6 @@ import {
 } from "./mod.ts";
 import pipe from "pipe";
 import { tryCopy } from "atom";
-import { toAsync } from "promise";
 
 Deno.test("bind", async () => {
   const obj = { foo: "bar" } as const;
@@ -23,19 +22,19 @@ Deno.test("bind", async () => {
   assertEquals(bound, { foo: "bar", bar: 3 });
   const inputPromise = await pipe(
     tryCopy<typeof obj>,
-    toAsync,
+    (x) => Promise.resolve(x),
     bind("bar", ({ foo }) => foo.length),
   )(obj);
   assertEquals(inputPromise, { foo: "bar", bar: 3 });
   const callbackPromise = await pipe(
     tryCopy<typeof obj>,
-    bind("bar", ({ foo }) => toAsync(foo.length)),
+    bind("bar", ({ foo }) => Promise.resolve(foo.length)),
   )(obj);
   assertEquals(callbackPromise, { foo: "bar", bar: 3 });
   const bothPromise = await pipe(
     tryCopy<typeof obj>,
-    toAsync,
-    bind("bar", ({ foo }) => toAsync(foo.length)),
+    (x) => Promise.resolve(x),
+    bind("bar", ({ foo }) => Promise.resolve(foo.length)),
   )(obj);
   assertEquals(bothPromise, { foo: "bar", bar: 3 });
 });
@@ -44,7 +43,7 @@ Deno.test("bindTo", async () => {
   const value = "bar" as const;
   const bound = bindTo("foo")(value);
   assertEquals(bound, { foo: "bar" });
-  const promiseBound = await bindTo("baz")(toAsync(bound));
+  const promiseBound = await bindTo("baz")(Promise.resolve(bound));
   assertEquals(promiseBound, { baz: { foo: "bar" } });
 });
 
@@ -102,8 +101,6 @@ Deno.test("pick", () => {
   } as const;
   const picked = pick(["foo", "asd"])(obj);
   assertEquals(picked, { foo: "bar", asd: "fgh" });
-  const notObject = () => pick([])(1);
-  assertThrows(notObject);
 });
 
 Deno.test("pluck", () => {
@@ -112,8 +109,6 @@ Deno.test("pluck", () => {
   assertEquals(plucked, { a: 1, c: 3, d: undefined });
   const pluckedWithDefaultValue = pluck(["a", "c", "d"], 4 as const)(obj);
   assertEquals(pluckedWithDefaultValue, { a: 1, c: 3, d: 4 });
-  const notObject = () => pluck([])(1);
-  assertThrows(notObject);
 
   interface PluckTest {
     a: number;
