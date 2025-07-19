@@ -1,4 +1,4 @@
-import type { ItersItems } from "types";
+import type { ItersItems } from "../types/iter.ts";
 
 /**
  * ```haskell

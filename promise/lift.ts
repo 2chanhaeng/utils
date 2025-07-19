@@ -1,9 +1,10 @@
-import type { Refinement } from "types";
+import type { Refinement } from "../types/pred.ts";
 
 /**
  * ```haskell
  * lift::(a -> Bool) -> Promise a -> Promise a
  * ```
+ *
  * Lifts a filter function to operate on a promise.
  *
  * @template T - The type of the value contained in the promise.
@@ -13,10 +14,12 @@ import type { Refinement } from "types";
  *          otherwise it rejects.
  *
  * @example
+ * ```ts
  * const isEven = (a) => a % 2 === 0;
  * const liftIsEven = lift(isEven);
  * console.log(await liftIsEven(Promise.resolve(2))); // Logs: 2
  * console.log(await liftIsEven(Promise.resolve(3))); // Throws an error
+ * ```
  */
 export default function lift<T, S extends T>(
   filter: Refinement<T, S>,

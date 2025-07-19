@@ -1,5 +1,5 @@
-import { reduce } from "iter";
-import apply from "apply";
+// deno-fmt-ignore-file
+import apply from "../apply/mod.ts";
 
 /**
  * @module pipe
@@ -46,49 +46,27 @@ import apply from "apply";
  * @param {...Function} fns - The functions to compose.
  * @returns {Function} A function that takes the initial arguments and returns the result of the composed functions.
  */
-// deno-fmt-ignore
 function pipe(): <T0 extends unknown[]>(...x: T0) => T0 extends [] ? undefined : T0 extends [infer U] ? U : unknown[]; // To prevent error when start to write pipe()
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], S>(f0: (...x: T0) => S, ): (...x: T0) => PipeReturn<[T0], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => S, ): (...x: T0) => PipeReturn<[T0, T1], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => T7, f7: (x: Awaited<T7>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, T8, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => T7, f7: (x: Awaited<T7>) => T8, f8: (x: Awaited<T8>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7, T8], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, T8, T9, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => T7, f7: (x: Awaited<T7>) => T8, f8: (x: Awaited<T8>) => T9, f9: (x: Awaited<T9>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7, T8, T9], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => T7, f7: (x: Awaited<T7>) => T8, f8: (x: Awaited<T8>) => T9, f9: (x: Awaited<T9>) => T10, f10: (x: Awaited<T10>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => T7, f7: (x: Awaited<T7>) => T8, f8: (x: Awaited<T8>) => T9, f9: (x: Awaited<T9>) => T10, f10: (x: Awaited<T10>) => T11, f11: (x: Awaited<T11>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => T7, f7: (x: Awaited<T7>) => T8, f8: (x: Awaited<T8>) => T9, f9: (x: Awaited<T9>) => T10, f10: (x: Awaited<T10>) => T11, f11: (x: Awaited<T11>) => T12, f12: (x: Awaited<T12>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => T7, f7: (x: Awaited<T7>) => T8, f8: (x: Awaited<T8>) => T9, f9: (x: Awaited<T9>) => T10, f10: (x: Awaited<T10>) => T11, f11: (x: Awaited<T11>) => T12, f12: (x: Awaited<T12>) => T13, f13: (x: Awaited<T13>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => T7, f7: (x: Awaited<T7>) => T8, f8: (x: Awaited<T8>) => T9, f9: (x: Awaited<T9>) => T10, f10: (x: Awaited<T10>) => T11, f11: (x: Awaited<T11>) => T12, f12: (x: Awaited<T12>) => T13, f13: (x: Awaited<T13>) => T14, f14: (x: Awaited<T14>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => T7, f7: (x: Awaited<T7>) => T8, f8: (x: Awaited<T8>) => T9, f9: (x: Awaited<T9>) => T10, f10: (x: Awaited<T10>) => T11, f11: (x: Awaited<T11>) => T12, f12: (x: Awaited<T12>) => T13, f13: (x: Awaited<T13>) => T14, f14: (x: Awaited<T14>) => T15, f15: (x: Awaited<T15>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => T7, f7: (x: Awaited<T7>) => T8, f8: (x: Awaited<T8>) => T9, f9: (x: Awaited<T9>) => T10, f10: (x: Awaited<T10>) => T11, f11: (x: Awaited<T11>) => T12, f12: (x: Awaited<T12>) => T13, f13: (x: Awaited<T13>) => T14, f14: (x: Awaited<T14>) => T15, f15: (x: Awaited<T15>) => T16, f16: (x: Awaited<T16>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => T7, f7: (x: Awaited<T7>) => T8, f8: (x: Awaited<T8>) => T9, f9: (x: Awaited<T9>) => T10, f10: (x: Awaited<T10>) => T11, f11: (x: Awaited<T11>) => T12, f12: (x: Awaited<T12>) => T13, f13: (x: Awaited<T13>) => T14, f14: (x: Awaited<T14>) => T15, f15: (x: Awaited<T15>) => T16, f16: (x: Awaited<T16>) => T17, f17: (x: Awaited<T17>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => T7, f7: (x: Awaited<T7>) => T8, f8: (x: Awaited<T8>) => T9, f9: (x: Awaited<T9>) => T10, f10: (x: Awaited<T10>) => T11, f11: (x: Awaited<T11>) => T12, f12: (x: Awaited<T12>) => T13, f13: (x: Awaited<T13>) => T14, f14: (x: Awaited<T14>) => T15, f15: (x: Awaited<T15>) => T16, f16: (x: Awaited<T16>) => T17, f17: (x: Awaited<T17>) => T18, f18: (x: Awaited<T18>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => T7, f7: (x: Awaited<T7>) => T8, f8: (x: Awaited<T8>) => T9, f9: (x: Awaited<T9>) => T10, f10: (x: Awaited<T10>) => T11, f11: (x: Awaited<T11>) => T12, f12: (x: Awaited<T12>) => T13, f13: (x: Awaited<T13>) => T14, f14: (x: Awaited<T14>) => T15, f15: (x: Awaited<T15>) => T16, f16: (x: Awaited<T16>) => T17, f17: (x: Awaited<T17>) => T18, f18: (x: Awaited<T18>) => T19, f19: (x: Awaited<T19>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19], S>;
-// deno-fmt-ignore
 function pipe<T0 extends unknown[], T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, S>(f0: (...x: T0) => T1, f1: (x: Awaited<T1>) => T2, f2: (x: Awaited<T2>) => T3, f3: (x: Awaited<T3>) => T4, f4: (x: Awaited<T4>) => T5, f5: (x: Awaited<T5>) => T6, f6: (x: Awaited<T6>) => T7, f7: (x: Awaited<T7>) => T8, f8: (x: Awaited<T8>) => T9, f9: (x: Awaited<T9>) => T10, f10: (x: Awaited<T10>) => T11, f11: (x: Awaited<T11>) => T12, f12: (x: Awaited<T12>) => T13, f13: (x: Awaited<T13>) => T14, f14: (x: Awaited<T14>) => T15, f15: (x: Awaited<T15>) => T16, f16: (x: Awaited<T16>) => T17, f17: (x: Awaited<T17>) => T18, f18: (x: Awaited<T18>) => T19, f19: (x: Awaited<T19>) => T20, f20: (x: Awaited<T20>) => S, ): (...x: T0) => PipeReturn<[T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20], S>;
 function pipe(
   ...[f0, ...fns]:

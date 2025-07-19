@@ -1,4 +1,4 @@
-import { isObject } from "pred";
+import isObject from "./isObject.ts";
 
 /**
  * Checks if the given value is an AsyncIterable.

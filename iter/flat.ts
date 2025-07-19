@@ -1,7 +1,7 @@
-// deno-lint-ignore no-unused-vars
-import type chain from "./chain.ts";
-import type { Inferior, Inferiors, ItemsItem, RecursiveFlat } from "types";
-import { isChar, isIterable } from "pred";
+import isChar from "../pred/isChar.ts";
+import isIterable from "../pred/isIterable.ts";
+import type { ItemsItem, RecursiveFlat } from "../types/iter.ts";
+import type { Inferior, Inferiors } from "../types/number.ts";
 
 /**
  * ```haskell

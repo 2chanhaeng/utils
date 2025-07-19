@@ -1,3 +1,5 @@
+import isPromise from "../pred/isPromise.ts";
+
 /**
  * @module apply
  * /**
@@ -27,8 +29,6 @@
  * const result = apply(5)(x => x * 2); // number
  * ```
  */
-import { isPromise } from "pred";
-
 function apply<T, U>(
   x: Promise<T>,
   f: (arg: Awaited<T>) => Promise<U>,

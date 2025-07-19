@@ -1,4 +1,4 @@
-import type { Predicate, PredicateLike, Refinement } from "types";
+import type { Predicate, PredicateLike, Refinement } from "../types/pred.ts";
 
 /**
  * ```haskell

@@ -1,5 +1,5 @@
-import apply from "apply";
-import { tryCopy } from "atom";
+import apply from "../apply/mod.ts";
+import tryCopy from "../atom/tryCopy.ts";
 
 /**
  * ```haskell
