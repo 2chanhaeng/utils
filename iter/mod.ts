@@ -22,6 +22,7 @@ export { default as map } from "./map.ts";
 export { default as prepend } from "./prepend.ts";
 export { default as range } from "./range.ts";
 export { default as reduce } from "./reduce.ts";
+export { default as scan } from "./scan.ts";
 export { default as take } from "./take.ts";
 export { default as takeWhile } from "./takeWhile.ts";
 export { default as toIter } from "./toIter.ts";

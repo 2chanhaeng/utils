@@ -15,6 +15,7 @@ import {
   prepend,
   range,
   reduce,
+  scan,
   take,
   takeWhile,
   toIter,
@@ -24,10 +25,6 @@ import { toArray } from "array";
 
 Deno.test("accumulate", () => {
   const items = [1, 2, 3, 4, 5];
-  const notInitResult = Array.from(
-    accumulate((acc: number, curr) => acc + curr)(items),
-  );
-  assertEquals(notInitResult, [1, 3, 6, 10, 15]);
   const initResult = Array.from(
     accumulate((acc, curr: number) => acc + curr, 10)(items),
   );
@@ -37,7 +34,7 @@ Deno.test("accumulate", () => {
   );
   assertEquals(indexResult, [10, 11, 14, 19, 26, 35]);
   const otherType = Array.from(
-    accumulate((acc, curr) => `${acc}${curr}`, "10" as string)(items),
+    accumulate((acc, curr) => `${acc}${curr}`, "10")(items),
   );
   assertEquals(otherType, ["10", "101", "1012", "10123", "101234", "1012345"]);
   const asyncResult = Promise.all(
@@ -56,10 +53,6 @@ Deno.test("accumulate", () => {
     )(asyncItems),
   );
   asyncItemsResult.then((res) => assertEquals(res, [0, 1, 3, 6, 10, 15]));
-  const emptyResult = Array.from(
-    accumulate((acc: number, curr: number) => acc + curr)([]),
-  );
-  assertEquals(emptyResult, []);
 });
 
 Deno.test("append", () => {
@@ -222,6 +215,18 @@ Deno.test("take", () => {
   assertEquals(result, [1, 2, 3]);
   const lesserItems = Array.from(take(6)(items));
   assertEquals(lesserItems, [1, 2, 3, 4, 5]);
+});
+
+Deno.test("scan", () => {
+  const items = [1, 2, 3, 4, 5];
+  const notInitResult = Array.from(
+    scan((acc: number, curr) => acc + curr)(items),
+  );
+  assertEquals(notInitResult, [1, 3, 6, 10, 15]);
+  const emptyResult = Array.from(
+    scan((acc: number, curr) => acc + curr)([]),
+  );
+  assertEquals(emptyResult, []);
 });
 
 Deno.test("takeWhile", () => {
